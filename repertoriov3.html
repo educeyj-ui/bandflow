@@ -1,0 +1,1645 @@
+<div id="bandflow-root">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+#bandflow-root{font-family:'Inter',system-ui,sans-serif!important;background:transparent!important;color:#f1f5f9!important;min-height:100vh;padding:24px;border-radius:16px;box-sizing:border-box}
+#bandflow-root *{box-sizing:border-box}
+.bf-header{display:flex;justify-content:space-between;align-items:center;background:#181818;padding:16px 24px;border-radius:14px;border:1px solid #2a2a2a;margin-bottom:24px;flex-wrap:wrap;gap:16px}
+.bf-brand{display:flex;align-items:center;gap:12px}
+.bf-logo-icon{background:linear-gradient(135deg,#1ed760,#1db954);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.bf-title{font-size:22px;font-weight:700;color:#fff!important;margin:0!important}
+.bf-pill{background:rgba(255,255,255,.10);color:#f1f1f1;border:1px solid rgba(255,255,255,.2);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.bf-nav{display:flex;gap:8px}
+.bf-tab-btn{background:transparent;border:none;color:#b3b3b3;padding:10px 18px;border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s}
+.bf-tab-btn:hover{color:#f8fafc;background:#2a2a2a}
+.bf-tab-btn.active{background:#1ed760!important;color:#000000!important;font-weight:700}
+.bf-toolbar{background:#181818;border:1px solid #2a2a2a;padding:16px;border-radius:14px;display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+.bf-search-box{flex:1;min-width:240px;position:relative}
+.bf-search-box i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7a7a7a}
+.bf-input{width:100%;background:#121212;border:1px solid #2a2a2a;border-radius:10px;padding:10px 14px 10px 40px;color:#f8fafc;font-size:14px;outline:none}
+.bf-input:focus{border-color:rgba(255,255,255,.5)}
+.bf-btn-main{background:#1ed760;color:#000000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .2s}
+.bf-btn-main:hover{background:#1db954;color:#fff}
+.bf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.bf-card{background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.bf-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:8px}
+.bf-badge-key{background:rgba(255,255,255,.15);color:#ffffff;border:1px solid rgba(255,255,255,.3);padding:4px 10px;border-radius:8px;font-size:12px;font-weight:700}
+.bf-badge-bpm{color:#b3b3b3;font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px}
+.bf-card-title{font-size:18px;font-weight:700;color:#fff!important;margin:0 0 4px!important}
+.bf-card-sub{font-size:13px;color:#b3b3b3;margin-bottom:16px}
+.bf-card-foot{border-top:1px solid #2a2a2a;padding-top:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bf-svc-date{color:#fbbf24;font-size:13px;font-weight:600;text-transform:capitalize}
+.bf-svc-songs{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:6px}
+.bf-svc-songs li{display:flex;align-items:center;gap:10px;background:#121212;border:1px solid #2a2a2a;border-radius:10px;padding:8px 10px;font-size:14px}
+.bf-svc-songs .n{color:#7a7a7a;font-weight:700;width:18px}
+.bf-svc-songs .t{flex:1}
+.bf-empty{color:#7a7a7a;font-size:13px;margin-bottom:16px}
+.bf-mini{background:#2a2a2a;border:none;color:#f1f5f9;border-radius:8px;padding:5px 9px;cursor:pointer;font-size:12px}
+.bf-mini:hover{background:#1ed760;color:#000000}
+.bf-live-container{background:#0a0a0a;border:1px solid #2a2a2a;border-radius:14px;padding:28px;height:60vh;overflow-y:auto;font-family:monospace;scroll-behavior:smooth}
+.chord-word{display:inline-flex;flex-direction:column;align-items:flex-start;max-width:100%;vertical-align:bottom}
+.chord-mark{font-weight:700;color:#fbbf24;font-size:15px;line-height:1.2;min-height:1.2em;padding-right:.4em;white-space:pre}
+.lyric-text{line-height:1.3;font-size:18px;color:#f8fafc;white-space:pre-wrap;overflow-wrap:anywhere}
+.song-line{min-height:2.4em;display:flex;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px}
+.bf-hidden{display:none!important}
+.bf-modal-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:100001}
+.bf-modal-content{background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:24px;width:90%;max-width:600px;max-height:85vh;overflow-y:auto}
+.bf-form-group{margin-bottom:14px}
+.bf-form-group label{display:block;font-size:13px;color:#b3b3b3;margin-bottom:6px;font-weight:600}
+.bf-form-input{width:100%;background:#121212;border:1px solid #2a2a2a;border-radius:8px;padding:10px;color:#fff;font-size:14px;outline:none}
+.bf-accordion{background:#121212;border:1px solid #2a2a2a;border-radius:10px;padding:12px;margin-bottom:16px}
+#bandflow-root{position:relative;margin:0;max-width:none;width:min(1280px,calc(100vw - 48px));overflow-x:clip}
+html,body{overflow-x:clip}
+#bandflow-root .bf-input,#bandflow-root .bf-form-input,#bandflow-root .bf-met-in{background:#121212!important;color:#f8fafc!important;border:1px solid #2a2a2a!important;border-radius:10px!important;font-size:14px!important;line-height:1.4!important;box-shadow:none!important;height:auto!important;margin:0!important}
+#bandflow-root .bf-input,#bandflow-root .bf-form-input{width:100%!important}
+#bandflow-root .bf-input{padding:10px 14px 10px 40px!important;border-radius:999px!important;background:#242424!important;border-color:transparent!important}
+#bandflow-root .bf-form-input{padding:10px!important}
+#bandflow-root .bf-met-in{width:76px!important;padding:8px!important;text-align:center}
+#bandflow-root input[type=range]{background:transparent!important;border:0!important;padding:0!important;height:24px!important;accent-color:#d9d9d9}
+.bf-met{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#181818;border:1px solid #2a2a2a;border-radius:14px;padding:12px 16px;margin-bottom:16px}
+.bf-met-label{font-weight:700;color:#fff;font-size:14px}
+.bf-met-unit{color:#b3b3b3;font-size:13px;font-weight:600}
+#bf-met-led{width:22px;height:22px;border-radius:50%;background:#1ed760;opacity:.25;flex:none}
+.bf-tab-btn,.bf-btn-main,.bf-pill{white-space:nowrap}
+#bf-sec-live:not(.bf-hidden){position:fixed;top:0;left:0;right:0;bottom:0;height:100vh;height:100dvh;z-index:100000;background:var(--bf-atmo,linear-gradient(145deg,#090d12,#101318)) !important;padding:12px clamp(12px,3vw,40px);display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:contain}
+.bf-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bf-sfoot{display:flex;gap:6px;margin-top:auto}
+.bf-cover-row{display:flex;gap:12px;align-items:center;margin-top:10px}
+.bf-cover-prev{width:64px;height:64px;border-radius:10px;background:#121212;border:1px dashed #2a2a2a;overflow:hidden;flex:none}
+.bf-cover-prev img{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.bf-cover-msg{font-size:12px;color:#b3b3b3;line-height:1.35}
+.bf-live-cover{width:56px;height:56px;border-radius:10px;object-fit:cover;box-shadow:0 6px 16px rgba(0,0,0,.5);flex:none;max-width:none}
+#bandflow-root input[type=color]{width:44px!important;height:34px!important;padding:2px!important;border:1px solid #2a2a2a!important;background:transparent!important;border-radius:8px!important;cursor:pointer;flex:none}
+#bf-sec-live .bf-header,#bf-sec-live .bf-met{background:rgba(18,18,18,.55)}
+#bf-sec-live .bf-live-container{background:rgba(10,10,10,.8)}
+@property --bfc{syntax:'<color>';inherits:true;initial-value:#14532d}
+html{--bfc:#14532d;--bf-atmo:radial-gradient(ellipse at 12% 0%,rgba(20,83,45,.55) 0%,transparent 48%),linear-gradient(145deg,#090d12 0%,#101318 58%,#080a0e 100%);background:var(--bf-atmo)!important;background-attachment:fixed!important;transition:background .65s ease}
+body.bf-page,body.bf-page #page-container,body.bf-page #et-main-area,body.bf-page #main-content,body.bf-page .et_pb_section{background:transparent!important}
+#bandflow-root{border-radius:0}
+.bf-header,.bf-toolbar{background:rgba(0,0,0,.32);border-color:rgba(255,255,255,.08)}
+.bf-btn-main,.bf-tab-btn{border-radius:999px}
+.bf-badge-key{background:rgba(255,255,255,.12);color:#fff;border:none}
+.bf-live-container{scrollbar-color:#535353 transparent}
+.bf-h2{font-size:24px;font-weight:700;color:#fff!important;margin:4px 0 16px!important}
+.bf-card .bf-svc-songs li{border:1px solid var(--n,#1ed760);box-shadow:0 0 6px rgba(var(--nrgb,30,215,96),.9),0 0 16px rgba(var(--nrgb,30,215,96),.45),inset 0 0 8px rgba(var(--nrgb,30,215,96),.15)}
+.bf-logo{height:78px;width:auto;max-width:min(340px,70vw);object-fit:contain;border-radius:12px;display:block;animation:bfLogoGlow 3.5s ease-in-out infinite}
+@keyframes bfLogoGlow{0%,100%{box-shadow:0 0 0 1px rgba(30,215,96,.35),0 0 16px rgba(30,215,96,.28)}50%{box-shadow:0 0 0 1px rgba(30,215,96,.8),0 0 34px rgba(30,215,96,.62)}}
+.bf-wordmark{font-size:26px;font-weight:800;letter-spacing:-.3px;color:#fff!important}
+.bf-wordmark span{color:#1ed760!important;text-shadow:0 0 6px rgba(30,215,96,.9),0 0 18px rgba(30,215,96,.55);animation:bfNeon 3s ease-in-out infinite}
+@keyframes bfNeon{0%,100%{text-shadow:0 0 5px rgba(30,215,96,.8),0 0 14px rgba(30,215,96,.4)}50%{text-shadow:0 0 8px rgba(30,215,96,1),0 0 24px rgba(30,215,96,.7)}}
+@media(prefers-reduced-motion:reduce){.bf-logo,.bf-wordmark span{animation:none}}
+.bf-tab-btn,.bf-btn-main,.bf-mini{background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 14px rgba(0,0,0,.22);text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.bf-tab-btn:hover,.bf-btn-main:hover,.bf-mini:hover{background:rgba(255,255,255,.18);color:#fff}
+.bf-tab-btn.active{background:rgba(255,255,255,.28)!important;color:#fff!important;border-color:rgba(255,255,255,.45)!important;font-weight:700}
+.bf-stop,.bf-stop:hover{background:rgba(239,68,68,.38)!important;border-color:rgba(239,68,68,.6)!important;color:#fff!important}
+#bandflow-root .bf-input{background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.16)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+#bandflow-root .bf-input::placeholder{color:rgba(255,255,255,.55)}
+.bf-speed{display:flex;align-items:center;gap:8px;background:#121212;border:1px solid #2a2a2a;padding:6px 12px;border-radius:10px}
+.bf-speed-lbl{font-size:11px;color:#b3b3b3;font-weight:600}
+.bf-speed-val{font-size:12px;color:#fff;font-weight:700;min-width:34px;text-align:right}
+#bandflow-root input[type=range].bf-range{-webkit-appearance:none!important;appearance:none!important;width:110px!important;height:22px!important;background:transparent!important;padding:0!important;border:0!important;cursor:pointer;--p:0%}
+#bandflow-root .bf-range::-webkit-slider-runnable-track{height:6px;border-radius:99px;background:linear-gradient(90deg,#e5e5e5 var(--p),rgba(255,255,255,.22) var(--p))}
+#bandflow-root .bf-range::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;margin-top:-6px;box-shadow:0 0 0 3px rgba(255,255,255,.25),0 2px 6px rgba(0,0,0,.5)}
+#bandflow-root .bf-range::-moz-range-track{height:6px;border-radius:99px;background:rgba(255,255,255,.22)}
+#bandflow-root .bf-range::-moz-range-progress{height:6px;border-radius:99px;background:#e5e5e5}
+#bandflow-root .bf-range::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:0}
+.bf-prog{flex:none;height:4px;border-radius:99px;background:rgba(255,255,255,.15);margin:0 0 8px;overflow:hidden}
+#bf-prog-bar{height:100%;width:0;background:#e5e5e5;border-radius:99px;transition:width .15s linear}
+@media(max-width:700px){
+.bf-logo{height:112px;max-width:100%}
+#bandflow-root{padding:12px;border-radius:12px;width:calc(100vw - 20px)}
+body.bf-page #page-container{padding-top:0!important}
+body.bf-page .et_pb_section{padding-top:6px!important;padding-bottom:6px!important}
+body.bf-page .et_pb_row{padding-top:0!important;padding-bottom:0!important}
+.bf-header{padding:12px;gap:10px;margin-bottom:14px}
+.bf-brand{width:100%;flex-direction:column;align-items:center;gap:10px}
+.bf-title{font-size:19px!important}
+.bf-nav{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.bf-nav .bf-tab-btn{justify-content:center;padding:10px 8px;font-size:13px}
+.bf-nav #bf-sync-btn{grid-column:1/-1}
+.bf-toolbar{padding:12px;gap:10px;margin-bottom:14px}
+.bf-toolbar .bf-btn-main{width:100%;justify-content:center}
+.bf-search-box{min-width:100%}
+.bf-grid{grid-template-columns:1fr;gap:14px}
+.bf-card{padding:14px}
+.bf-live-container{padding:14px;height:65vh}
+.lyric-text{font-size:16px}
+.bf-modal-content{padding:16px;width:94%}
+.bf-met{padding:10px 12px;gap:8px}
+.bf-met .bf-btn-main{width:100%;justify-content:center}
+.bf-h2{font-size:20px}
+}
+
+/* ---------- AJUSTE DE REPERTORIO Y TARJETAS ---------- */
+#bandflow-root{width:100%!important;max-width:1280px!important;margin:0 auto!important;left:0!important;right:auto!important;overflow-x:hidden!important;padding:clamp(10px,2vw,24px)!important}
+#bandflow-root .bf-library-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 12px;min-width:0}
+#bandflow-root .bf-library-heading .bf-h2{margin:0!important;min-width:0}
+@media(max-width:700px){
+  #bandflow-root{width:100%!important;max-width:100%!important;margin:0!important;padding:10px!important;left:0!important}
+  #bandflow-root .bf-library-heading{align-items:center;gap:6px}
+  #bandflow-root .bf-toolbar{min-width:0;width:100%}
+  #bandflow-root .bf-search-box{min-width:0;width:100%;flex:1 1 100%}
+}
+@media(max-width:380px){
+  #bandflow-root .bf-library-heading .bf-h2{font-size:18px!important}
+}
+
+/* ---------- AJUSTES FINALES: ACORDES, TRACKPAD Y REPRODUCTOR ---------- */
+#bandflow-root{width:100%!important;max-width:1280px!important;margin-inline:auto!important;left:0!important;right:auto!important;overflow-x:clip!important;min-width:0!important}
+#bf-sec-live:not(.bf-hidden){width:100%;min-width:0}
+#bf-sec-live .song-line{display:flex!important;flex-wrap:nowrap!important;align-items:flex-end!important;width:max-content;min-width:100%;max-width:none;min-height:2.4em;margin-bottom:10px;white-space:pre}
+#bf-sec-live .chord-word{display:inline-flex!important;flex:0 0 auto!important;flex-direction:column;align-items:flex-start;vertical-align:bottom;max-width:none!important;white-space:pre}
+#bf-sec-live .chord-mark{white-space:pre;flex:none}
+#bf-sec-live .lyric-text{white-space:pre!important;overflow-wrap:normal!important;word-break:normal!important;max-width:none!important;flex:none;line-height:1.3}
+#bf-sec-live .song-line>.lyric-text{white-space:pre!important;width:max-content;min-width:100%}
+@media(max-width:700px){
+  #bandflow-root{width:100%!important;max-width:100%!important;margin:0!important;padding:10px!important;left:0!important;right:0!important}
+  #bf-sec-live .lyric-text{font-size:16px}
+  #bf-sec-live .chord-mark{font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){#bandflow-root *,#bf-sec-live *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- MODO EN VIVO: BLOQUE UNICO (barra, controles, letra y video) ---------- */
+.bf-live-bar{display:flex;align-items:center;gap:8px;flex:none;margin:0 0 8px;min-width:0}
+.bf-bar-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700;color:#fff;font-size:15px;text-align:left}
+.bf-bar-ic{padding:9px 13px}
+.bf-bar-vid{flex:none}
+#bf-sec-live:not(.bf-top-off) .bf-bar-title,#bf-sec-live:not(.bf-top-off) .bf-bar-ic{display:none}
+#bf-sec-live .bf-bar-vid.active{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.45)}
+#bf-sec-live .bf-live-top{flex:none;max-height:none;overflow:visible}
+#bf-sec-live.bf-top-off .bf-live-top{display:none}
+#bf-sec-live .bf-live-top .bf-header{margin-bottom:10px!important;padding:10px 14px}
+#bf-sec-live .bf-live-top .bf-title{font-size:18px!important}
+#bf-sec-live .bf-live-top .bf-met{margin-bottom:10px;padding:8px 12px}
+#bf-sec-live .bf-live-top .bf-accordion{margin-bottom:10px;padding:8px 12px}
+#bf-sec-live .bf-live-layout{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:12px;flex:1 1 0;min-height:0;min-width:0;overflow:hidden}
+#bf-sec-live .bf-live-layout.bf-vid-open{grid-template-columns:minmax(0,1fr) minmax(250px,min(34%,420px))}
+#bf-sec-live #bf-live-sheet{min-width:0;min-height:0;height:auto;overflow-y:auto;overflow-x:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;scroll-behavior:auto;scrollbar-gutter:stable;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+#bf-sec-live .bf-yt-card{display:none;min-width:0;align-self:start;max-height:100%;overflow:auto;background:rgba(18,18,18,.92);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+#bf-sec-live .bf-vid-open .bf-yt-card{display:block}
+.bf-yt-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.bf-yt-title{font-size:14px;font-weight:700;color:#fff;margin:0!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bf-yt-actions{display:flex;gap:6px;flex:none}
+.bf-yt-btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;border-radius:8px;padding:6px 9px;cursor:pointer;font-size:12px;white-space:nowrap;touch-action:manipulation}
+.bf-yt-frame{position:relative;width:100%;aspect-ratio:16/9;background:#050505;border-radius:9px;overflow:hidden}
+.bf-yt-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.bf-yt-empty{font-size:13px;line-height:1.5;color:#b3b3b3;padding:6px 2px}
+@media(max-width:700px){
+  #bf-sec-live .bf-live-layout,#bf-sec-live .bf-live-layout.bf-vid-open{display:flex;flex-direction:column;gap:8px}
+  #bf-sec-live .bf-yt-card{order:-1;flex:none;width:100%;max-height:none;padding:8px;overflow:visible}
+  #bf-sec-live .bf-yt-head{margin-bottom:6px}
+  #bf-sec-live .bf-yt-frame{width:min(100%,calc(30vh * 16 / 9));width:min(100%,calc(30dvh * 16 / 9));margin:0 auto}
+  #bf-sec-live #bf-live-sheet{flex:1 1 0;min-height:140px;font-size:16px;padding:12px 12px calc(28px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-width:420px){#bf-sec-live.bf-top-off .bf-bar-vid span{display:none}}
+@media(max-height:520px){
+  #bf-sec-live:not(.bf-hidden){padding-top:8px;padding-bottom:8px}
+  #bf-sec-live .bf-live-top .bf-accordion{display:none}
+}
+
+/* ---------- REPERTORIO EN LISTA (estilo Spotify) ---------- */
+.bf-lib-count{font-size:13px;color:#c8c8c8;white-space:nowrap}
+.bf-slist{display:flex;flex-direction:column;gap:2px;width:100%;min-width:0}
+.bf-srow{--c:#333333;display:flex;align-items:center;gap:4px;border:1px solid transparent;border-radius:10px;min-width:0}
+.bf-srow{transition:background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease}
+.bf-srow:hover,.bf-srow:focus-within{background:linear-gradient(105deg,color-mix(in srgb,var(--c) 24%,transparent) 0%,color-mix(in srgb,var(--c) 9%,transparent) 42%,rgba(255,255,255,.035) 100%);border-color:color-mix(in srgb,var(--c) 72%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 24%,transparent),0 0 12px color-mix(in srgb,var(--c) 48%,transparent),0 0 30px color-mix(in srgb,var(--c) 25%,transparent),inset 0 0 20px color-mix(in srgb,var(--c) 13%,transparent);transform:translateY(-1px)}
+.bf-smain{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:8px 6px 8px 10px;border-radius:8px;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
+.bf-smain:focus-visible{box-shadow:inset 0 0 0 2px rgba(255,255,255,.55)}
+.bf-smain:active{background:rgba(255,255,255,.14)}
+.bf-scover{position:relative;flex:none;width:48px;height:48px;border-radius:6px;overflow:hidden;background:linear-gradient(135deg,var(--c),#121212);display:flex;align-items:center;justify-content:center}
+.bf-scover img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.bf-scover .bf-ph{font-size:18px;color:rgba(255,255,255,.55)}
+.bf-scover .bf-sp{position:absolute;top:0;left:0;right:0;bottom:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);color:#fff;font-size:15px}
+.bf-srow:hover .bf-sp,.bf-smain:focus-visible .bf-sp{display:flex}
+.bf-sinfo{flex:1;min-width:0}
+.bf-sinfo .bf-card-title{font-size:15px;font-weight:600;line-height:1.25;margin:0!important;color:#fff!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bf-sinfo .bf-card-sub{font-size:13px;margin:2px 0 0;color:#b3b3b3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:0}
+.bf-skey{flex:none;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.12);padding:3px 9px;border-radius:99px}
+.bf-sbpm{flex:none;font-size:12px;color:#b3b3b3;min-width:62px;text-align:right}
+.bf-smore{flex:none;width:36px;height:36px;margin-right:6px;border:0;border-radius:50%;background:transparent;color:#b3b3b3;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.bf-smore:hover,.bf-smore:focus-visible{background:rgba(255,255,255,.14);color:#fff}
+@media(max-width:700px){
+  .bf-smain{gap:10px;padding:7px 4px 7px 6px}
+  .bf-scover{width:44px;height:44px}
+  .bf-sbpm{display:none}
+  .bf-sinfo .bf-card-sub{font-size:12.5px}
+  .bf-smore{margin-right:0;width:34px}
+}
+
+/* ---------- CELULAR VERTICAL: AJUSTE DE LETRA ---------- */
+@media(max-width:700px){
+  #bf-sec-live #bf-live-sheet{padding:14px 18px calc(28px + env(safe-area-inset-bottom,0px));font-size:16px}
+  #bf-sec-live .song-line{flex-wrap:wrap!important;width:auto!important;min-width:0!important;max-width:100%!important;margin-bottom:12px}
+  #bf-sec-live .chord-word{flex:0 1 auto!important;min-width:0!important;max-width:100%!important}
+  #bf-sec-live .lyric-text,#bf-sec-live .song-line>.lyric-text{white-space:pre-wrap!important;overflow-wrap:anywhere!important;max-width:100%!important;width:auto!important;min-width:0!important}
+}
+
+/* ---------- TAMAÑO DE LETRA ---------- */
+#bf-sec-live .lyric-text{font-size:var(--fs,18px)!important}
+#bf-sec-live .chord-mark{font-size:calc(var(--fs,18px) * .85)!important}
+.bf-bar-fs{display:flex;gap:6px;flex:none}
+.bf-bar-fs .bf-tab-btn{padding:9px 12px;font-weight:700;justify-content:center;min-width:42px}
+.bf-bar-fs .bf-tab-btn:disabled{opacity:.35;cursor:default}
+@media(max-width:420px){
+  #bf-sec-live .bf-live-bar{gap:6px}
+  #bf-sec-live .bf-live-bar .bf-tab-btn{padding:9px 10px}
+  #bf-sec-live .bf-live-bar .bf-bar-fs .bf-tab-btn{min-width:36px}
+  #bf-sec-live .bf-live-bar #bf-top-btn{padding:9px 12px;font-size:13px}
+}
+
+/* ---------- CANCIONES REVISADAS ---------- */
+.bf-rev-wrap{position:relative!important;top:auto!important;left:auto!important;width:100%;height:30px;z-index:1;display:flex;justify-content:flex-end;align-items:center;margin-bottom:10px;pointer-events:none}
+.bf-rev-btn{pointer-events:auto;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;min-width:28px;padding:0!important;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(30,30,30,.9);color:#b3b3b3;font-size:13px;line-height:1;cursor:pointer;touch-action:manipulation}
+.bf-rev-btn:hover{background:rgba(60,60,60,.95)}
+.bf-rev-btn.is-rev{background:rgba(30,215,96,.18);border-color:#1ed760;color:#4ade80}
+.bf-rev-spacer{display:none!important}
+.bf-rev-filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.bf-rev-filters .bf-tab-btn{padding:6px 12px;font-size:13px}
+.bf-srev{flex:none;color:#1ed760;font-size:16px}
+@media(max-width:700px){.bf-rev-btn{width:28px;height:28px;min-width:28px}}
+
+/* ---------- PAGINACIÓN Y PALETA ---------- */
+#bandflow-root .bf-pagination{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0;padding:10px 2px;color:#ddd}
+#bandflow-root .bf-page-info{font-size:12px;color:#aaa}
+#bandflow-root .bf-page-controls,#bandflow-root .bf-page-dots{display:flex;align-items:center;gap:6px}
+#bandflow-root .bf-page-btn{min-width:34px;height:34px;padding:0 10px;border:1px solid #ffffff30;border-radius:99px;background:#ffffff12;color:white;cursor:pointer}
+#bandflow-root .bf-page-btn.active,#bandflow-root .bf-page-btn:hover:not(:disabled){background:#ffffff35}
+#bandflow-root .bf-page-btn:disabled{opacity:.3;cursor:not-allowed}
+#bandflow-root .bf-page-dots button{width:28px;height:28px;border:0;border-radius:50%;background:transparent;color:#ddd}
+#bandflow-root .bf-page-dots button.active{background:#ffffff35;color:#fff}
+#bandflow-root .bf-palette-panel{margin:12px 0 16px;padding:13px;border:1px solid #ffffff24;border-radius:13px;background:#ffffff08}
+#bandflow-root .bf-palette-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:9px}
+#bandflow-root .bf-palette-options{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+#bandflow-root .bf-palette-option{min-width:0;padding:5px;border:1px solid #ffffff25;border-radius:9px;background:#ffffff08;color:#eee;text-align:left;cursor:pointer}
+#bandflow-root .bf-palette-option[aria-pressed=true]{border-color:#fff;box-shadow:0 0 0 2px #ffffff20}
+#bandflow-root .bf-palette-swatch{display:block;height:36px;border-radius:7px;margin-bottom:6px;background:linear-gradient(112deg,var(--p1) 0%,var(--p2) 36%,var(--p3) 68%,var(--p4) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 3px 12px color-mix(in srgb,var(--p2) 20%,transparent);border:1px solid rgba(255,255,255,.12)}
+#bandflow-root .bf-palette-name{font-size:10px;white-space:nowrap}
+#bandflow-root .bf-palette-note{font-size:11px;color:#aaa;margin-top:8px}
+#bandflow-root .bf-palette-custom{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px}
+#bandflow-root .bf-palette-custom label{display:flex;align-items:center;gap:6px;color:#ddd;font-size:12px}
+@media(max-width:700px){#bandflow-root .bf-pagination{justify-content:center}#bandflow-root .bf-page-info{width:100%;text-align:center;order:2}#bandflow-root .bf-page-controls{width:100%;justify-content:space-between;order:1}#bandflow-root .bf-palette-options{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* ==========================================================================
+   GUITARRA: AURA ACTIVA NEÓN TIPO BANDFLOW (MULTICAPA Y TRANSLÚCIDA)
+   ========================================================================== */
+#bandflow-root {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* 1. Halo difuso ambiental detrás del instrumento */
+#bandflow-root .bf-guitar-haze {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  left: 50%;
+  top: 50%;
+  width: clamp(260px, 32vw, 440px);
+  height: min(85vh, 920px);
+  transform: translate(-50%, -50%);
+  border-radius: 40% 40% 50% 50% / 30% 30% 60% 60%;
+  background: radial-gradient(ellipse at 50% 70%, 
+    var(--bf-guitar-a, #1ed760) 0%, 
+    var(--bf-guitar-b, #1db954) 45%, 
+    transparent 75%
+  );
+  filter: blur(50px);
+  opacity: 0.85;
+  mix-blend-mode: screen;
+  animation: bfAuraPulse 4s ease-in-out infinite alternate;
+}
+
+/* 2. Núcleo anatómico intenso (mástil y cuerpo) */
+#bandflow-root .bf-guitar-haze::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  width: 24px;
+  height: 60%;
+  transform: translateX(-50%);
+  background: var(--bf-guitar-c, #ffffff);
+  box-shadow: 
+    0 0 20px 8px var(--bf-guitar-a, #1ed760),
+    0 0 50px 18px var(--bf-guitar-b, #1db954);
+  border-radius: 12px;
+  filter: blur(14px);
+  opacity: 0.9;
+}
+
+#bandflow-root .bf-guitar-haze::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  width: 75%;
+  height: 48%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, var(--bf-guitar-a, #1ed760) 0%, transparent 70%);
+  filter: blur(28px);
+  opacity: 0.95;
+}
+
+/* 3. Fotografía de la guitarra con eliminación del fondo negro */
+#bandflow-root .bf-guitar-watermark {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  left: 50%;
+  top: 50%;
+  display: block;
+  width: clamp(240px, 30vw, 420px);
+  height: min(85vh, 920px);
+  object-fit: contain;
+  object-position: center;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen; 
+  filter: brightness(2) contrast(1.6) 
+    drop-shadow(0 0 8px rgba(30, 215, 96, 0.7)) 
+    drop-shadow(0 0 24px rgba(30, 215, 96, 0.4));
+  animation: bfGuitarGlow 4s ease-in-out infinite alternate;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Animaciones de pulsación activa del aura */
+@keyframes bfAuraPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.95);
+    opacity: 0.65;
+    filter: blur(52px);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+    filter: blur(36px);
+  }
+}
+
+@keyframes bfGuitarGlow {
+  0% {
+    filter: brightness(1.7) contrast(1.4) 
+      drop-shadow(0 0 6px var(--bf-guitar-a, #1ed760)) 
+      drop-shadow(0 0 16px rgba(30, 215, 96, 0.3));
+  }
+  100% {
+    filter: brightness(2.2) contrast(1.8) 
+      drop-shadow(0 0 14px var(--bf-guitar-a, #1ed760)) 
+      drop-shadow(0 0 35px var(--bf-guitar-b, #1db954));
+  }
+}
+
+#bandflow-root .bf-header,
+#bandflow-root #bf-sec-songs,
+#bandflow-root #bf-sec-services,
+#bandflow-root .bf-toolbar,
+#bandflow-root .bf-library-heading,
+#bandflow-root .bf-rev-filters,
+#bandflow-root #bf-page-shell,
+#bandflow-root #bf-pagination,
+#bandflow-root .bf-grid {
+  position: relative;
+  z-index: 2;
+}
+
+@media(max-width:700px){
+  #bandflow-root .bf-guitar-haze {
+    width: 260px;
+    height: 75vh;
+  }
+  #bandflow-root .bf-guitar-watermark {
+    width: 240px;
+    height: 75vh;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #bandflow-root .bf-guitar-haze,
+  #bandflow-root .bf-guitar-watermark {
+    animation: none !important;
+  }
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Aura y silueta activa de la guitarra con enlace directo iili.io -->
+<div class="bf-guitar-haze" aria-hidden="true"></div>
+<img class="bf-guitar-watermark" src="https://iili.io/nSZSiOB.png" alt="" aria-hidden="true" decoding="async">
+
+<div class="bf-header">
+  <div class="bf-brand">
+    <div id="bf-logo-icon" class="bf-logo-icon bf-hidden"><i class="fa-solid fa-guitar"></i></div>
+    <img id="bf-logo" class="bf-logo" src="https://iili.io/nwprrzX.md.jpg" alt="BandFlow" onerror="window.bfLogoFail&&bfLogoFail()">
+    <h1 id="bf-wordmark" class="bf-title bf-wordmark bf-hidden">Band<span>Flow</span></h1>
+    <span class="bf-pill">Stage & Worship</span>
+  </div>
+  <div class="bf-nav">
+    <button onclick="bfSwitchTab('songs')" id="bf-tab-songs" class="bf-tab-btn active"><i class="fa-solid fa-music"></i> Repertorio</button>
+    <button onclick="bfSwitchTab('services')" id="bf-tab-services" class="bf-tab-btn"><i class="fa-solid fa-list-check"></i> Órdenes / Setlists</button>
+    <button onclick="bfSetKey()" id="bf-sync-btn" class="bf-tab-btn"><i class="fa-solid fa-cloud"></i> <span id="bf-sync-txt">Sincronizar</span></button>
+  </div>
+</div>
+
+<div id="bf-sec-songs">
+  <div class="bf-toolbar">
+    <div class="bf-search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="bf-search" oninput="bfSongsPage=1;bfRenderSongs()" placeholder="Buscar por título, autor o letra..." class="bf-input">
+    </div>
+    <button onclick="bfOpenSongModal()" class="bf-btn-main"><i class="fa-solid fa-plus"></i> Nueva Canción</button>
+  </div>
+  <div class="bf-library-heading">
+    <h2 class="bf-h2">Tu repertorio</h2>
+    <span id="bf-songs-count" class="bf-lib-count"></span>
+  </div>
+  <div id="bf-rev-filters" class="bf-rev-filters" role="group" aria-label="Filtrar por revisión"></div>
+  <div id="bf-page-shell"><div id="bf-songs-grid" class="bf-slist"></div></div>
+  <div id="bf-pagination" class="bf-pagination" aria-label="Paginación del repertorio"></div>
+</div>
+
+<div id="bf-sec-services" class="bf-hidden">
+  <div class="bf-toolbar" style="justify-content:space-between;">
+    <h3 style="margin:0;font-size:18px;color:#fff;">Planificación de Servicios</h3>
+    <button onclick="bfOpenServiceModal()" class="bf-btn-main"><i class="fa-solid fa-calendar-plus"></i> Nuevo Servicio</button>
+  </div>
+  <div id="bf-services-grid" class="bf-grid"></div>
+</div>
+
+<div id="bf-sec-live" class="bf-hidden">
+  <div class="bf-live-bar">
+    <button id="bf-top-btn" class="bf-tab-btn" onclick="bfToggleTop()"><i id="bf-top-ic" class="fa-solid fa-chevron-up"></i> <span id="bf-top-txt">Ocultar controles</span></button>
+    <button type="button" id="bf-vid-chip" class="bf-tab-btn bf-bar-vid" onclick="bfToggleYoutubeCard()" aria-pressed="false" aria-label="Mostrar u ocultar el video"><i class="fa-brands fa-youtube"></i> <span id="bf-vid-txt">Video</span></button>
+    <span class="bf-bar-fs" role="group" aria-label="Tamaño de la letra">
+      <button type="button" id="bf-fs-dec" class="bf-tab-btn" onclick="bfFontSize(-1)" aria-label="Letra más pequeña">A−</button>
+      <button type="button" id="bf-fs-inc" class="bf-tab-btn" onclick="bfFontSize(1)" aria-label="Letra más grande">A+</button>
+    </span>
+    <span id="bf-bar-title" class="bf-bar-title"></span>
+    <button id="bf-bar-scroll" class="bf-tab-btn bf-bar-ic" onclick="bfToggleScroll()" aria-label="Autoscroll"><i class="fa-solid fa-angles-down"></i></button>
+    <button id="bf-bar-met" class="bf-tab-btn bf-bar-ic" onclick="bfMetToggle()" aria-label="Metrónomo"><i class="fa-solid fa-stopwatch"></i></button>
+    <button class="bf-tab-btn bf-bar-ic" onclick="bfExitLive()" aria-label="Salir"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="bf-live-top">
+  <div class="bf-header" style="margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+      <img id="bf-live-cover" class="bf-live-cover bf-hidden" alt="" onerror="this.classList.add('bf-hidden')">
+      <div>
+        <h2 id="bf-live-title" class="bf-title" style="color:#fff!important;">Título</h2>
+        <span id="bf-live-meta" style="font-size:13px;color:#b3b3b3;"></span>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <div style="background:#121212;border:1px solid #2a2a2a;padding:6px 12px;border-radius:10px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:#b3b3b3;font-weight:600;">Tono:</span>
+        <button onclick="bfTranspose(-1)" class="bf-tab-btn" style="padding:4px 8px;">-1</button>
+        <span id="bf-live-key" style="color:#fff;font-weight:700;min-width:20px;text-align:center;">G</span>
+        <button onclick="bfTranspose(1)" class="bf-tab-btn" style="padding:4px 8px;">+1</button>
+      </div>
+      <button id="bf-scroll-btn" onclick="bfToggleScroll()" class="bf-btn-main"><i id="bf-scroll-icon" class="fa-solid fa-play"></i> Autoscroll</button>
+      <div class="bf-speed">
+        <span class="bf-speed-lbl">Lento</span>
+        <input type="range" id="bf-scroll-speed" class="bf-range" min="1" max="10" value="1" oninput="bfUpdateScrollSpeed()">
+        <span class="bf-speed-lbl">Rápido</span>
+        <span id="bf-speed-val" class="bf-speed-val">1/10</span>
+      </div>
+      <button onclick="bfEditCurrentSong()" class="bf-tab-btn"><i class="fa-solid fa-pen"></i> Editar</button>
+      <button onclick="bfExitLive()" class="bf-tab-btn"><i class="fa-solid fa-xmark"></i> Salir</button>
+    </div>
+  </div>
+  <div class="bf-met">
+    <div id="bf-met-led"></div>
+    <span class="bf-met-label">Metrónomo</span>
+    <button onclick="bfMetAdj(-1)" class="bf-mini">−</button>
+    <input type="number" id="bf-met-bpm" class="bf-met-in" min="30" max="250" value="120" oninput="bfMetFromInput(this)" onchange="bfMetSetBpm(this.value)">
+    <button onclick="bfMetAdj(1)" class="bf-mini">+</button>
+    <span class="bf-met-unit">BPM</span>
+    <select id="bf-met-beats" class="bf-met-in" style="width:80px!important;" onchange="bfMetSetBeats(this.value)"><option value="2">2/4</option><option value="3">3/4</option><option value="4" selected>4/4</option><option value="6">6/8</option></select>
+    <button id="bf-met-btn" onclick="bfMetToggle()" class="bf-btn-main"><i class="fa-solid fa-play"></i> Iniciar</button>
+  </div>
+  <details class="bf-accordion">
+    <summary style="cursor:pointer;font-weight:600;color:#e5e5e5;font-size:14px;"><i class="fa-solid fa-users"></i> Músicos e Integrantes Asignados</summary>
+    <div id="bf-live-musicians" style="margin-top:10px;font-size:13px;color:#d0d0d0;"></div>
+  </details>
+  </div>
+  <div class="bf-prog"><div id="bf-prog-bar"></div></div>
+  <div class="bf-live-layout">
+    <div id="bf-live-sheet" class="bf-live-container"></div>
+    <aside id="bf-yt-card" class="bf-yt-card" aria-label="Reproductor de YouTube">
+      <div class="bf-yt-head">
+        <h3 id="bf-yt-title" class="bf-yt-title">Video</h3>
+        <div class="bf-yt-actions">
+          <button type="button" id="bf-yt-min-btn" class="bf-yt-btn" onclick="bfToggleYoutubeCard()" aria-label="Minimizar reproductor de video">−</button>
+          <button type="button" class="bf-yt-btn" onclick="bfOpenYoutube()" aria-label="Abrir video en YouTube">↗</button>
+        </div>
+      </div>
+      <div id="bf-yt-frame-wrap" class="bf-yt-frame bf-hidden"></div>
+      <div id="bf-yt-empty" class="bf-yt-empty">Esta canción no tiene un enlace de YouTube. Pulsa Editar para agregarlo.</div>
+    </aside>
+  </div>
+</div>
+
+<!-- MODAL CANCIÓN -->
+<div id="bf-modal" class="bf-modal-overlay bf-hidden">
+  <div class="bf-modal-content">
+    <h3 style="margin-top:0;color:#fff;">Editar Canción</h3>
+    <input type="hidden" id="bf-modal-id">
+    <div class="bf-form-group"><label>Título de la canción</label><input type="text" id="bf-modal-song-title" class="bf-form-input"></div>
+    <div class="bf-form-group"><label>Autor / Banda</label><input type="text" id="bf-modal-artist" class="bf-form-input" placeholder="ej. Miel San Marcos"></div>
+    <div class="bf-form-group">
+      <label>Portada (enlace de Imgur o freeimage.host)</label>
+      <input type="url" id="bf-modal-cover" class="bf-form-input" placeholder="https://i.imgur.com/xxxxxxx.jpg" oninput="bfCoverDebounce()" onchange="bfCoverChange()">
+      <div class="bf-cover-row">
+        <div id="bf-cover-prev" class="bf-cover-prev"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <input type="color" id="bf-modal-color" value="#1e3a5f" oninput="bfColorTouched()">
+            <span style="font-size:13px;color:#d0d0d0;font-weight:600;">Color de fondo</span>
+          </div>
+          <div id="bf-cover-msg" class="bf-cover-msg"></div>
+        </div>
+      </div>
+      <div class="bf-palette-panel"><div class="bf-palette-title">Ambiente de color</div><div id="bf-palette-options" class="bf-palette-options" role="group" aria-label="Paletas degradadas"></div><div id="bf-palette-note" class="bf-palette-note">Elige una sugerencia o personaliza los colores.</div><div class="bf-palette-custom"><label>Principal <input type="color" id="bf-palette-c1" value="#1e3a5f"></label><label>Secundario <input type="color" id="bf-palette-c2" value="#0f766e"></label></div></div>
+    </div>
+    <div class="bf-form-group">
+      <label>Enlace de YouTube (opcional)</label>
+      <input type="url" id="bf-modal-youtube" class="bf-form-input" placeholder="https://www.youtube.com/watch?v=..." autocomplete="url">
+      <div class="bf-cover-msg">Pega el enlace del video o de YouTube Shorts. Se mostrará en el reproductor durante la canción.</div>
+    </div>
+    <div style="display:flex;gap:12px;">
+      <div class="bf-form-group" style="flex:1;"><label>Tono Base</label><input type="text" id="bf-modal-key" class="bf-form-input" placeholder="ej. Em, G, C"></div>
+      <div class="bf-form-group" style="flex:1;"><label>Tempo (BPM)</label><input type="number" id="bf-modal-bpm" class="bf-form-input" placeholder="120"></div>
+    </div>
+    <div class="bf-form-group"><label>Asignación de Músicos / Cantantes</label><input type="text" id="bf-modal-musicians" class="bf-form-input" placeholder="Voz: Ana | Guitarra: Juan | Bajo: Pedro"></div>
+    <div class="bf-form-group"><label>Letra y Acordes (usa [Acorde] antes de la sílaba)</label><textarea id="bf-modal-content" class="bf-form-input" rows="10" style="font-family:monospace;"></textarea></div>
+    <div class="bf-form-group" style="background:#242424;border:1px solid #444;border-radius:12px;padding:14px;">
+      <label for="bf-modal-reviewed" style="display:flex;align-items:center;gap:10px;cursor:pointer;color:#fff;font-size:14px;">
+        <input type="checkbox" id="bf-modal-reviewed" style="width:18px;height:18px;accent-color:#1ed760;flex:none;">
+        <i class="fa-solid fa-shield-halved" style="color:#1ed760"></i> Canción revisada
+      </label>
+      <div id="bf-modal-review-help" style="font-size:12px;color:#b3b3b3;margin-top:8px;line-height:1.5;">Actívala cuando hayas comprobado la letra, los acordes y su posición. Al guardar se solicitará la contraseña para protegerla.</div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+      <button id="bf-modal-del" onclick="bfDeleteFromModal()" class="bf-tab-btn bf-hidden" style="color:#f87171;margin-right:auto;"><i class="fa-solid fa-trash"></i> Eliminar</button>
+      <button onclick="bfCloseModal()" class="bf-tab-btn">Cancelar</button>
+      <button onclick="bfSaveSong()" class="bf-btn-main">Guardar Cambios</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LOCK -->
+<div id="bf-lock-modal" class="bf-modal-overlay bf-hidden" role="dialog" aria-modal="true" aria-labelledby="bf-lock-title">
+  <div class="bf-modal-content" style="max-width:380px">
+    <h3 id="bf-lock-title" style="margin-top:0;color:#fff;">Canción revisada</h3>
+    <p id="bf-lock-text" style="color:#b3b3b3;font-size:14px;margin:0 0 12px;"></p>
+    <input type="password" id="bf-lock-input" class="bf-form-input" autocomplete="off" placeholder="Contraseña" onkeydown="if(event.key==='Enter')bfLockOk()">
+    <div id="bf-lock-err" style="color:#f87171;font-size:13px;min-height:18px;margin-top:6px;"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+      <button type="button" class="bf-tab-btn" onclick="bfLockCancel()">Cancelar</button>
+      <button type="button" class="bf-tab-btn active" onclick="bfLockOk()">Desbloquear</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SERVICIO -->
+<div id="bf-smodal" class="bf-modal-overlay bf-hidden">
+  <div class="bf-modal-content">
+    <h3 id="bf-smodal-title" style="margin-top:0;color:#fff;">Nuevo Servicio</h3>
+    <input type="hidden" id="bf-smodal-id">
+    <div style="display:flex;gap:12px;">
+      <div class="bf-form-group" style="flex:1;"><label>Fecha</label><input type="date" id="bf-smodal-date" class="bf-form-input"></div>
+      <div class="bf-form-group" style="flex:2;"><label>Nombre del servicio</label><input type="text" id="bf-smodal-name" class="bf-form-input" placeholder="Servicio dominical"></div>
+    </div>
+    <div class="bf-form-group"><label>Notas (opcional)</label><input type="text" id="bf-smodal-notes" class="bf-form-input" placeholder="Ensayo a las 8:00, tema, etc."></div>
+    <div class="bf-form-group">
+      <label>Canciones del servicio (en orden)</label>
+      <ul id="bf-smodal-list" class="bf-svc-songs"></ul>
+      <div style="display:flex;gap:8px;">
+        <select id="bf-smodal-select" class="bf-form-input" style="flex:1;"></select>
+        <button onclick="bfSvcAddSong()" class="bf-btn-main"><i class="fa-solid fa-plus"></i> Agregar</button>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+      <button onclick="bfCloseServiceModal()" class="bf-tab-btn">Cancelar</button>
+      <button onclick="bfSaveService()" class="bf-btn-main">Guardar Servicio</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const bfChromatic=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+let bfSongs=JSON.parse(localStorage.getItem('bf_songs')||'[]');
+let bfServices=JSON.parse(localStorage.getItem('bf_services')||'[]');
+let bfCurrentSong=null,bfTransposeSemi=0,bfScrollInterval=null,bfIsScrolling=false;
+let bfLiveFrom='songs',bfSvcSel=[];
+
+/* ---------- SINCRONIZACIÓN (WordPress REST) ---------- */
+const BF_API=location.origin+'/wp-json/bandflow/v1/data';
+const BF_IMG=location.origin+'/wp-json/bandflow/v1/img';
+const BF_KEY='CAMBIA-ESTA-CLAVE';
+let bfKey=BF_KEY;
+function bfStatus(t){const e=document.getElementById('bf-sync-txt');if(e)e.innerText=t;}
+function bfHdr(){return {'Content-Type':'application/json','X-BF-Key':bfKey};}
+let bfDeleted=JSON.parse(localStorage.getItem('bf_deleted')||'[]'),bfBusy=0;
+function bfSaveLocal(){
+  localStorage.setItem('bf_songs',JSON.stringify(bfSongs));
+  localStorage.setItem('bf_services',JSON.stringify(bfServices));
+  localStorage.setItem('bf_deleted',JSON.stringify(bfDeleted));
+}
+function bfMerge(win,lose){
+  const m=new Map();
+  lose.forEach(x=>m.set(x.id,x));
+  win.forEach(x=>{
+    const o=m.get(x.id);
+    if(o&&(o.mod||0)>(x.mod||0)) return;
+    m.set(x.id,x);
+  });
+  return [...m.values()].filter(x=>!bfDeleted.includes(x.id));
+}
+async function bfPush(){
+  if(!bfKey) return;
+  bfBusy++;
+  try{
+    const r0=await fetch(BF_API+'?_='+Date.now(),{headers:bfHdr(),cache:'no-store'});
+    if(r0.ok){
+      const d=await r0.json();
+      bfDeleted=[...new Set([...bfDeleted,...(d.deleted||[])])];
+      bfSongs=bfMerge(bfSongs,d.songs||[]);
+      bfServices=bfMerge(bfServices,d.services||[]);
+      bfSaveLocal();
+    }
+    const r=await fetch(BF_API,{method:'POST',headers:bfHdr(),body:JSON.stringify({songs:bfSongs,services:bfServices,deleted:bfDeleted})});
+    bfStatus(r.ok?'Sincronizado':'Clave incorrecta');
+    bfRenderSongs();bfRenderServices();
+  }catch(e){bfStatus('Sin conexión');}
+  bfBusy--;
+}
+async function bfPull(){
+  if(!bfKey||bfBusy) return;
+  try{
+    const r=await fetch(BF_API+'?_='+Date.now(),{headers:bfHdr(),cache:'no-store'});
+    if(!r.ok){bfStatus('Clave incorrecta');return;}
+    const d=await r.json();
+    if(bfBusy) return;
+    const sg=d.songs||[],sv=d.services||[];
+    bfDeleted=[...new Set([...bfDeleted,...(d.deleted||[])])];
+    const seed=bfSongs.length===1&&bfSongs[0].id==='1'&&!bfServices.length;
+    if(seed){
+      if(!sg.length&&!sv.length){bfStatus('Sincronizado');return;}
+      bfSongs=sg;bfServices=sv;
+    }else{
+      bfSongs=bfMerge(sg,bfSongs);
+      bfServices=bfMerge(sv,bfServices);
+    }
+    bfSaveLocal();
+    bfRenderSongs();bfRenderServices();
+    const only=(x,y)=>x.some(i=>!y.some(j=>j.id===i.id));
+    if(only(bfSongs,sg)||only(bfServices,sv)||bfDeleted.length>(d.deleted||[]).length) bfPush();
+    else bfStatus('Sincronizado');
+    bfAutoColors();
+  }catch(e){bfStatus('Sin conexión');}
+}
+function bfSetKey(){bfStatus('Sincronizando...');bfPull();}
+
+/* ---------- METRÓNOMO ---------- */
+let bfMetAudio=null,bfMetOn=false,bfMetBpm=120,bfMetBeats=4,bfMetNext=0,bfMetBeat=0,bfMetTimer=null,bfMetQueue=[],bfMetRaf=null;
+function bfMetClick(t,accent){
+  const o=bfMetAudio.createOscillator(),g=bfMetAudio.createGain();
+  o.type='sine';o.frequency.value=accent?1400:900;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(accent?1:0.7,t+0.003);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+0.07);
+  o.connect(g);g.connect(bfMetAudio.destination);
+  o.start(t);o.stop(t+0.09);
+}
+function bfMetSched(){
+  while(bfMetNext<bfMetAudio.currentTime+0.15){
+    const acc=bfMetBeat===0;
+    bfMetClick(bfMetNext,acc);
+    bfMetQueue.push({t:bfMetNext,acc:acc});
+    bfMetNext+=60/bfMetBpm;
+    bfMetBeat=(bfMetBeat+1)%bfMetBeats;
+  }
+  bfMetTimer=setTimeout(bfMetSched,25);
+}
+function bfMetFlash(acc){
+  const led=document.getElementById('bf-met-led');
+  if(!led) return;
+  led.style.transition='none';
+  led.style.background=acc?'#fbbf24':'#1ed760';
+  led.style.boxShadow='0 0 18px 6px '+(acc?'rgba(251,191,36,.7)':'rgba(30,215,96,.6)');
+  led.style.opacity='1';
+  setTimeout(()=>{led.style.transition='all .25s';led.style.opacity='.25';led.style.boxShadow='none';},70);
+}
+function bfMetDraw(){
+  if(!bfMetOn) return;
+  while(bfMetQueue.length&&bfMetQueue[0].t<=bfMetAudio.currentTime){bfMetFlash(bfMetQueue.shift().acc);}
+  bfMetRaf=requestAnimationFrame(bfMetDraw);
+}
+function bfMetUi(){
+  const b=document.getElementById('bf-met-btn');
+  if(b){
+    b.innerHTML=bfMetOn?'<i class="fa-solid fa-stop"></i> Detener':'<i class="fa-solid fa-play"></i> Iniciar';
+    b.classList.toggle('bf-stop',bfMetOn);
+  }
+  const bb=document.getElementById('bf-bar-met');
+  if(bb) bb.classList.toggle('bf-stop',bfMetOn);
+}
+function bfMetStart(){
+  if(!bfMetAudio) bfMetAudio=new (window.AudioContext||window.webkitAudioContext)();
+  if(bfMetAudio.state==='suspended') bfMetAudio.resume();
+  bfMetOn=true;bfMetBeat=0;bfMetQueue=[];
+  bfMetNext=bfMetAudio.currentTime+0.08;
+  bfMetSched();
+  bfMetRaf=requestAnimationFrame(bfMetDraw);
+  bfMetUi();
+}
+function bfMetStop(){
+  clearTimeout(bfMetTimer);
+  if(bfMetRaf) cancelAnimationFrame(bfMetRaf);
+  bfMetOn=false;bfMetQueue=[];
+  const led=document.getElementById('bf-met-led');
+  if(led){led.style.transition='all .2s';led.style.opacity='.25';led.style.boxShadow='none';}
+  bfMetUi();
+}
+function bfMetToggle(){if(bfMetOn) bfMetStop(); else bfMetStart();}
+function bfMetSetBpm(v){
+  bfMetBpm=Math.max(30,Math.min(250,Math.round(+v)||120));
+  const i=document.getElementById('bf-met-bpm');
+  if(i) i.value=bfMetBpm;
+}
+function bfMetAdj(d){bfMetSetBpm(bfMetBpm+d);}
+function bfMetFromInput(el){const v=+el.value;if(v>=30&&v<=250) bfMetBpm=Math.round(v);}
+function bfMetSetBeats(v){bfMetBeats=parseInt(v)||4;bfMetBeat=0;}
+
+/* ---------- AJUSTE DE CONTENEDOR ---------- */
+function bfFit(){
+  const r=document.getElementById('bandflow-root');
+  if(!r) return;
+  r.style.left='0px';
+  r.style.right='auto';
+  r.style.marginLeft='auto';
+  r.style.marginRight='auto';
+  r.style.width='100%';
+  r.style.maxWidth='1280px';
+}
+let bfFitTimers=[];
+function bfFitSoon(){
+  bfFit();
+  bfFitTimers.forEach(clearTimeout);
+  bfFitTimers=[120,400,900].map(t=>setTimeout(bfFit,t));
+}
+
+if(bfSongs.length===0){
+  bfSongs=[{id:'1',title:'Él es el Rey',artist:'Inspiración',key:'Em',bpm:120,musicians:'Voz: Carlos | Guitarras: Luis | Bajo: Pedro | Batería: Juan',content:'[Em]El es el rey infi[C]nito en poder\n[Em]El es el rey de los [C]cielos\n[Em]Sere para el [C]siervo fiel\n[G]Pues mi vida compro con [D]su amor\n\n[Em]El es el rey lo con[C]fiesa mi ser\n[Em]El es el rey de los [C]siglos\n[Em]Mi vida la rindo a sus [C]pies\n[G]El es rey sobre mi co[D]razon\n\n[Em]El es el rey, el [C]es el rey\n[G]El es el rey de mi [D]vida\n[Em]El es el rey, el [C]es el rey\n[G]Reina con au[D]toridad\n\n[C]Su reino e[D]terno es\n[Em]Su trono en el [C]cielo es\n[Am]El es el rey que [D]viene a su pueblo a lle[Em]var'}];
+  localStorage.setItem('bf_songs',JSON.stringify(bfSongs));
+}
+
+function bfEsc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&'+'amp;','<':'&'+'lt;','>':'&'+'gt;','"':'&'+'quot;',"'":'&'+'#39;'}[c]));}
+function bfSaveServices(){bfSaveLocal();bfPush();}
+function bfFmtDate(d){
+  if(!d) return 'Sin fecha';
+  const p=d.split('-').map(Number);
+  return new Date(p[0],p[1]-1,p[2]).toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function bfToday(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
+
+/* ---------- LOGO ---------- */
+const BF_LOGO_SHOW_NAME=false;
+function bfLogoFail(){
+  document.getElementById('bf-logo').classList.add('bf-hidden');
+  document.getElementById('bf-logo-icon').classList.remove('bf-hidden');
+  document.getElementById('bf-wordmark').classList.remove('bf-hidden');
+}
+
+/* ---------- COLOR Y PORTADAS ---------- */
+let bfCoverTimer=null,bfCoverTok=0,bfCoverPromise=null,bfModalColorSet=false;
+let bfModalPalette=null,bfSongsPage=1;
+const BF_SONGS_PER_PAGE=10;
+function bfRgb2Hsl(r,g,b){
+  r/=255;g/=255;b/=255;
+  const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2;
+  let h=0,s=0;
+  if(mx!==mn){
+    const d=mx-mn;
+    s=l>.5?d/(2-mx-mn):d/(mx+mn);
+    h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4;
+    h*=60;
+  }
+  return [h,s,l];
+}
+function bfHsl2Hex(h,s,l){
+  const a=s*Math.min(l,1-l);
+  const f=n=>{const k=(n+h/30)%12;const v=l-a*Math.max(-1,Math.min(k-3,9-k,1));return Math.round(255*v).toString(16).padStart(2,'0');};
+  return '#'+f(0)+f(8)+f(4);
+}
+function bfAutoColor(t){
+  let h=0;
+  for(let i=0;i<t.length;i++) h=(h*31+t.charCodeAt(i))%360;
+  return bfHsl2Hex(h,.5,.36);
+}
+function bfSongColor(s){
+  return (s.color&&/^#[0-9a-f]{6}$/i.test(s.color))?s.color:bfAutoColor(s.title||'');
+}
+function bfNeon(hex){
+  const n=parseInt(hex.slice(1),16),h=bfRgb2Hsl(n>>16&255,n>>8&255,n&255);
+  return h[1]<.12?'#1ed760':bfHsl2Hex(h[0],1,.58);
+}
+function bfRgbStr(hex){const n=parseInt(hex.slice(1),16);return (n>>16&255)+','+(n>>8&255)+','+(n&255);}
+function bfNormCover(u){
+  u=(u||'').trim().replace(/^http:\/\//i,'https://');
+  if(!/^https:\/\//i.test(u)) return '';
+  let m=u.match(/^https:\/\/(?:www\.|m\.)?imgur\.com\/([A-Za-z0-9]{5,8})(?:\.[a-z0-9]+)?(?:[?#].*)?$/i);
+  if(m) return 'https://i.imgur.com/'+m[1]+'.jpg';
+  m=u.match(/^https:\/\/freeimage\.host\/i\/(?:[^\/]*\.)?([A-Za-z0-9]{5,10})\/?(?:[?#].*)?$/i);
+  if(m) return 'https://iili.io/'+m[1]+'.jpg';
+  return u;
+}
+function bfImgOk(u){
+  return new Promise(res=>{
+    const i=new Image();
+    const t=setTimeout(()=>res(false),6000);
+    i.onload=()=>{clearTimeout(t);res(true);};
+    i.onerror=()=>{clearTimeout(t);res(false);};
+    i.src=u;
+  });
+}
+async function bfProbe(url){
+  const m=url.match(/^(https:\/\/iili\.io\/[A-Za-z0-9]+)\.(jpg|jpeg|png|webp|gif)$/i);
+  if(!m) return url;
+  const list=[url].concat(['jpg','png','jpeg','webp','gif'].filter(e=>e!==m[2].toLowerCase()).map(e=>m[1]+'.'+e));
+  for(const u of list){ if(await bfImgOk(u)) return u; }
+  return url;
+}
+async function bfColorFromImage(url){
+  try{return await bfColorFromSrc(url);}
+  catch(e){
+    if(!bfKey) throw e;
+    return await bfColorFromSrc(BF_IMG+'?k='+encodeURIComponent(bfKey)+'&u='+encodeURIComponent(url));
+  }
+}
+let bfColorTried={};
+async function bfAutoColors(){
+  let changed=false;
+  for(const s of bfSongs.slice()){
+    if(!s.cover||s.color||bfColorTried[s.id]) continue;
+    bfColorTried[s.id]=1;
+    try{
+      const c=await bfColorFromImage(s.cover);
+      const cur=bfSongs.find(x=>x.id===s.id);
+      if(cur&&!cur.color){cur.color=c;changed=true;}
+    }catch(e){}
+  }
+  if(changed){bfSaveLocal();bfRenderSongs();bfRenderServices();bfPush();}
+}
+function bfColorFromSrc(url){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    const to=setTimeout(()=>reject(new Error('timeout')),8000);
+    img.crossOrigin='anonymous';
+    img.onload=()=>{
+      clearTimeout(to);
+      try{
+        const c=document.createElement('canvas');c.width=40;c.height=40;
+        const x=c.getContext('2d');x.drawImage(img,0,0,40,40);
+        const d=x.getImageData(0,0,40,40).data;
+        const bins=Array.from({length:12},()=>({w:0,r:0,g:0,b:0}));
+        let ar=0,ag=0,ab=0,n=0;
+        for(let i=0;i<d.length;i+=4){
+          if(d[i+3]<128) continue;
+          const r=d[i],g=d[i+1],b=d[i+2];
+          ar+=r;ag+=g;ab+=b;n++;
+          const hsl=bfRgb2Hsl(r,g,b);
+          if(hsl[1]<.25||hsl[2]<.15||hsl[2]>.88) continue;
+          const w=hsl[1]*(1-Math.abs(hsl[2]-.5)*1.2);
+          const bin=bins[Math.floor(hsl[0]/30)%12];
+          bin.w+=w;bin.r+=r*w;bin.g+=g*w;bin.b+=b*w;
+        }
+        if(!n){reject(new Error('vacia'));return;}
+        const best=bins.reduce((p,q)=>q.w>p.w?q:p);
+        let r,g,b;
+        if(best.w>0){r=best.r/best.w;g=best.g/best.w;b=best.b/best.w;}
+        else{r=ar/n;g=ag/n;b=ab/n;}
+        let hsl=bfRgb2Hsl(r,g,b);
+        let s=hsl[1],l=Math.min(Math.max(hsl[2],.28),.5);
+        if(best.w>0) s=Math.max(s,.35);
+        resolve(bfHsl2Hex(hsl[0],s,l));
+      }catch(e){reject(e);}
+    };
+    img.onerror=()=>{clearTimeout(to);reject(new Error('carga'));};
+    img.src=url;
+  });
+}
+function bfCoverDebounce(){clearTimeout(bfCoverTimer);bfCoverTimer=setTimeout(bfCoverChange,500);}
+function bfCoverChange(){clearTimeout(bfCoverTimer);bfCoverPromise=bfCoverRun();return bfCoverPromise;}
+async function bfCoverRun(){
+  const inp=document.getElementById('bf-modal-cover'),prev=document.getElementById('bf-cover-prev'),msg=document.getElementById('bf-cover-msg');
+  const raw=inp.value.trim(),tok=++bfCoverTok;
+  prev.innerHTML='';
+  if(!raw){msg.innerText='Sin portada: se usará el color que elijas o uno automático.';return;}
+  let url=bfNormCover(raw);
+  if(!url){msg.innerText='El enlace debe empezar con https:// (copia el enlace de la imagen).';return;}
+  msg.innerText='Buscando la imagen...';
+  url=await bfProbe(url);
+  if(tok!==bfCoverTok) return;
+  inp.value=url;
+  const im=document.createElement('img');im.src=url;im.onerror=()=>im.remove();prev.appendChild(im);
+  msg.innerText='Detectando color...';
+  try{
+    const c=await bfColorFromImage(url);
+    if(tok!==bfCoverTok) return;
+    document.getElementById('bf-modal-color').value=c;
+    bfModalColorSet=true;bfInitPalette({color:c});
+    msg.innerText='Color detectado. Puedes cambiarlo.';
+  }catch(e){
+    if(tok!==bfCoverTok) return;
+    const ok=await bfImgOk(url);
+    if(tok!==bfCoverTok) return;
+    msg.innerText=ok?'La imagen se ve bien, pero este servicio no permite leer su color. Elígelo a mano con el selector.':'No encontré la imagen en ese enlace. Copia el enlace directo de la imagen o elige el color a mano.';
+  }
+}
+function bfColorTouched(){
+  bfModalColorSet=true;
+  const base=document.getElementById('bf-modal-color').value;
+  const natural=bfPaletteFromBase(base)[0];
+  bfModalPalette={id:natural.id,name:natural.name,colors:[...natural.colors]};
+  document.getElementById('bf-palette-c1').value=natural.colors[0];
+  document.getElementById('bf-palette-c2').value=natural.colors[1];
+  bfRenderPaletteOptions(base,bfModalPalette);
+  document.getElementById('bf-cover-msg').innerText='Color elegido a mano; se actualizó el degradado Natural.';
+  bfApplyAtmosphere(bfModalPalette);
+}
+function bfFillCoverUi(cover,color){
+  bfCoverTok++;bfCoverPromise=null;
+  bfModalColorSet=!!color;
+  document.getElementById('bf-modal-color').value=color||'#1e3a5f';
+  const prev=document.getElementById('bf-cover-prev');prev.innerHTML='';
+  if(cover){const im=document.createElement('img');im.src=cover;im.onerror=()=>im.remove();prev.appendChild(im);}
+  document.getElementById('bf-cover-msg').innerText=cover?(color?'Color guardado. Puedes cambiarlo.':'Esta portada no tiene color guardado.'):'Pega el enlace de la imagen (Imgur o freeimage.host) y el color se detecta solo.';
+}
+
+/* ---------- PALETAS ATMOSFÉRICAS ---------- */
+function bfPaletteFromBase(hex){
+  const n=parseInt((hex||'#1e3a5f').slice(1),16),h=bfRgb2Hsl(n>>16&255,n>>8&255,n&255),sat=Math.max(.62,Math.min(.92,h[1])),dark='#070914';
+  return [
+    {id:'auto',name:'Natural',colors:[bfHsl2Hex(h[0],sat,.56),bfHsl2Hex((h[0]+24)%360,sat*.92,.48),bfHsl2Hex((h[0]+205)%360,.82,.52),dark]},
+    {id:'emerald',name:'Esmeralda',colors:['#16c784','#00a99d','#45e0b5',dark]},
+    {id:'violet',name:'Violeta',colors:['#a855f7','#6366f1','#d946ef',dark]},
+    {id:'amber',name:'Ámbar',colors:['#ff9f1c','#f97316','#ffd166',dark]},
+    {id:'ocean',name:'Océano',colors:['#06b6d4','#2563eb','#38bdf8',dark]},
+    {id:'ruby',name:'Rubí',colors:['#f43f5e','#be123c','#fb7185',dark]},
+    {id:'rose',name:'Rosa',colors:['#ec4899','#a855f7','#fb7185',dark]},
+    {id:'copper',name:'Cobre',colors:['#f97316','#b45309','#fbbf24',dark]},
+    {id:'arctic',name:'Ártico',colors:['#38bdf8','#3b82f6','#67e8f9',dark]},
+    {id:'forest',name:'Bosque',colors:['#22c55e','#0d9488','#84cc16',dark]},
+    {id:'aurora',name:'Aurora eléctrica',colors:['#22d3ee','#8b5cf6','#ec4899',dark]},
+    {id:'neon-purple',name:'Neón púrpura',colors:['#c026d3','#7c3aed','#f0abfc',dark]},
+    {id:'deep-turquoise',name:'Turquesa profundo',colors:['#14b8a6','#0891b2','#5eead4',dark]},
+    {id:'solar',name:'Solar fusión',colors:['#facc15','#f97316','#fb7185',dark]},
+    {id:'magenta',name:'Magenta escarlata',colors:['#e11d48','#db2777','#f472b6',dark]}
+  ];
+}
+function bfPaletteForSong(song){
+  const saved=song&&song.palette&&Array.isArray(song.palette.colors)?song.palette:null;
+  if(saved&&saved.colors.length>=3)return {id:saved.id||'custom',name:saved.name||'Personalizada',colors:[saved.colors[0],saved.colors[1],saved.colors[2],saved.colors[3]||'#070914']};
+  return {id:'auto',name:'Natural',colors:bfPaletteFromBase(bfSongColor(song||{}))[0].colors};
+}
+function bfApplyAtmosphere(p){
+  const c=(p&&Array.isArray(p.colors)&&p.colors.length>=3)?p.colors:['#22d3ee','#8b5cf6','#ec4899','#070914'],base=c[3]||'#070914';
+  const html=document.documentElement;
+  const atmosphere=
+    `radial-gradient(ellipse 70% 40% at 14% 0%,${c[0]}72 0%,${c[0]}24 38%,transparent 76%),`+
+    `radial-gradient(ellipse 68% 42% at 88% 4%,${c[1]}68 0%,${c[1]}22 40%,transparent 76%),`+
+    `radial-gradient(ellipse 58% 34% at 50% 0%,${c[2]}38 0%,transparent 74%),`+
+    `radial-gradient(ellipse 56% 42% at 50% 58%,${c[1]}09 0%,transparent 78%),`+
+    `linear-gradient(180deg,${base} 0%,#080a13 34%,#060810 70%,#04060b 100%)`;
+  html.style.setProperty('--bfc',c[0]);html.style.setProperty('--bf-atmo',atmosphere);
+  html.style.setProperty('--bf-guitar-a',c[0]);html.style.setProperty('--bf-guitar-b',c[1]);html.style.setProperty('--bf-guitar-c',c[2]);
+  html.style.setProperty('background','var(--bf-atmo)','important');html.style.setProperty('background-attachment','fixed','important');
+  const live=document.getElementById('bf-sec-live');if(live)live.style.setProperty('background','var(--bf-atmo)','important');
+  let m=document.querySelector('meta[name=theme-color]');if(!m){m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m);}m.content=base;
+}
+function bfRenderPaletteOptions(base,picked){
+  const el=document.getElementById('bf-palette-options');if(!el)return;const opts=bfPaletteFromBase(base);
+  el.innerHTML=opts.map(o=>`<button type="button" class="bf-palette-option" data-palette="${o.id}" aria-pressed="${picked&&picked.id===o.id?'true':'false'}"><span class="bf-palette-swatch" style="--p1:${o.colors[0]};--p2:${o.colors[1]};--p3:${o.colors[2]};--p4:${o.colors[3]||"#070914"}"></span><span class="bf-palette-name">${o.name}</span></button>`).join('');
+  el.querySelectorAll('[data-palette]').forEach(b=>b.addEventListener('click',()=>{
+    const o=opts.find(x=>x.id===b.dataset.palette);bfModalPalette={id:o.id,name:o.name,colors:[...o.colors]};
+    document.getElementById('bf-palette-c1').value=o.colors[0];document.getElementById('bf-palette-c2').value=o.colors[1];
+    const baseInput=document.getElementById('bf-modal-color');if(baseInput){baseInput.value=o.colors[0];bfModalColorSet=true;}
+    el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+    document.getElementById('bf-palette-note').textContent='Paleta '+o.name+' seleccionada. Vista previa aplicada.';
+    bfApplyAtmosphere(bfModalPalette);
+  }));
+}
+function bfPaletteCustom(){
+  const c1=document.getElementById('bf-palette-c1').value,c2=document.getElementById('bf-palette-c2').value;bfModalPalette={id:'custom',name:'Personalizada',colors:[c1,c2,bfNeon(c2),'#070914']};
+  const baseInput=document.getElementById('bf-modal-color');if(baseInput){baseInput.value=bfModalPalette.colors[0];bfModalColorSet=true;}
+  document.getElementById('bf-palette-options').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));
+  document.getElementById('bf-palette-note').textContent='Paleta personalizada. Vista previa aplicada.';bfApplyAtmosphere(bfModalPalette);
+}
+function bfInitPalette(song){
+  const p=bfPaletteForSong(song||{});bfModalPalette={id:p.id,name:p.name,colors:[...p.colors]};
+  document.getElementById('bf-palette-c1').value=p.colors[0];document.getElementById('bf-palette-c2').value=p.colors[1];
+  const baseInput=document.getElementById('bf-modal-color');if(baseInput){baseInput.value=p.colors[0];bfModalColorSet=true;}
+  bfRenderPaletteOptions(bfSongColor(song||{}),p);
+  document.getElementById('bf-palette-c1').oninput=bfPaletteCustom;document.getElementById('bf-palette-c2').oninput=bfPaletteCustom;
+  bfApplyAtmosphere(bfModalPalette);
+}
+
+/* ---------- FONDO DE PÁGINA ---------- */
+const BF_BG_DEFAULT='#1ed760';
+let bfBgBase=BF_BG_DEFAULT;
+function bfMixHex(h,a){
+  const n=parseInt(h.slice(1),16),r=n>>16&255,g=n>>8&255,b=n&255;
+  const m=c=>Math.round(c*a+18*(1-a)).toString(16).padStart(2,'0');
+  return '#'+m(r)+m(g)+m(b);
+}
+function bfSetPageBg(col){
+  if(!/^#[0-9a-f]{6}$/i.test(col)) col=BF_BG_DEFAULT;
+  const top=bfMixHex(col,.55);
+  document.documentElement.style.setProperty('--bfc',top);
+  let m=document.querySelector('meta[name=theme-color]');
+  if(!m){m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m);}
+  m.content=top;
+}
+
+/* ---------- REPERTORIO ---------- */
+function bfRenderSongs(){
+  const grid=document.getElementById('bf-songs-grid');
+  if(!grid) return;
+  const q=(document.getElementById('bf-search').value||'').toLowerCase();
+  const counts={all:bfSongs.length,pend:bfSongs.filter(x=>!x.revisado).length,rev:bfSongs.filter(x=>x.revisado).length};
+  const fl=document.getElementById('bf-rev-filters');
+  if(fl) fl.innerHTML=[['all','Todas'],['pend','Por revisar'],['rev','Revisadas']].map(([k,t])=>`<button type="button" class="bf-tab-btn${bfRevFilter===k?' active':''}" onclick="bfSetRevFilter('${k}')" aria-pressed="${bfRevFilter===k}">${t} (${counts[k]})</button>`).join('');
+  const list=bfSongs.filter(s=>(s.title+' '+(s.artist||'')+' '+s.content).toLowerCase().includes(q)&&(bfRevFilter==='all'||(bfRevFilter==='rev')===!!s.revisado));
+  const cnt=document.getElementById('bf-songs-count');
+  if(cnt) cnt.textContent=list.length+(list.length===1?' canción':' canciones');
+  const pages=Math.max(1,Math.ceil(list.length/BF_SONGS_PER_PAGE));bfSongsPage=Math.min(Math.max(1,bfSongsPage),pages);
+  const start=(bfSongsPage-1)*BF_SONGS_PER_PAGE,visible=list.slice(start,start+BF_SONGS_PER_PAGE);
+  bfRenderPagination(list.length,pages,start);
+  if(!list.length){grid.innerHTML='<div class="bf-empty">No se encontraron canciones.</div>';return;}
+  grid.innerHTML=visible.map(s=>{
+    const pal=bfPaletteForSong(s),col=(pal.colors&&pal.colors[0])||bfSongColor(s),id=bfEsc(s.id),t=bfEsc(s.title);
+    const cover=s.cover?`<img src="${bfEsc(s.cover)}" alt="" loading="lazy" onerror="this.style.display='none'">`:'';
+    return `<div class="bf-srow" data-song-id="${id}" data-c="${col}" style="--c:${col}">
+      <div class="bf-smain" role="button" tabindex="0" aria-label="Abrir ${t}" onclick="bfStartLive('${id}','songs')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();bfStartLive('${id}','songs')}">
+        <div class="bf-scover"><i class="fa-solid fa-music bf-ph"></i>${cover}<span class="bf-sp"><i class="fa-solid fa-play"></i></span></div>
+        <div class="bf-sinfo">
+          <h3 class="bf-card-title" title="${t}">${t}</h3>
+          <div class="bf-card-sub" title="${bfEsc(s.artist||'')}">${bfEsc(s.artist||'')}</div>
+        </div>
+        <span class="bf-skey">${bfEsc(s.key||'')}</span>
+        ${s.revisado?'<i class="fa-solid fa-circle-check bf-srev" title="Revisada" aria-label="Revisada"></i>':''}
+        <span class="bf-sbpm">${bfEsc(s.bpm||'')} BPM</span>
+      </div>
+      <button type="button" class="bf-smore" onclick="bfOpenSongModal('${id}')" aria-label="Editar ${t}" title="Editar"><i class="fa-solid fa-ellipsis"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function bfRenderPagination(total,pages,start){const el=document.getElementById('bf-pagination');if(!el)return;if(total<=BF_SONGS_PER_PAGE){el.innerHTML=total?`<span class="bf-page-info">Mostrando ${total} canciones</span>`:'';return;}const end=Math.min(start+BF_SONGS_PER_PAGE,total),nums=[];for(let n=1;n<=pages;n++){if(n===1||n===pages||Math.abs(n-bfSongsPage)<=1)nums.push(n);else if(nums[nums.length-1]!=='…')nums.push('…');}el.innerHTML=`<span class="bf-page-info">Mostrando ${start+1}–${end} de ${total} canciones</span><div class="bf-page-controls"><button class="bf-page-btn" ${bfSongsPage===1?'disabled':''} onclick="bfChangePage(${bfSongsPage-1})">‹ Anterior</button><div class="bf-page-dots">${nums.map(n=>n==='…'?'<span>…</span>':`<button class="${n===bfSongsPage?'active':''}" aria-label="Página ${n}" aria-current="${n===bfSongsPage?'page':'false'}" onclick="bfChangePage(${n})">${n}</button>`).join('')}</div><button class="bf-page-btn" ${bfSongsPage===pages?'disabled':''} onclick="bfChangePage(${bfSongsPage+1})">Siguiente ›</button></div>`;}
+function bfChangePage(n){const q=(document.getElementById('bf-search').value||'').toLowerCase(),list=bfSongs.filter(s=>(s.title+' '+(s.artist||'')+' '+s.content).toLowerCase().includes(q)&&(bfRevFilter==='all'||(bfRevFilter==='rev')===!!s.revisado));bfSongsPage=Math.max(1,Math.min(Math.ceil(list.length/BF_SONGS_PER_PAGE)||1,n));bfRenderSongs();document.getElementById('bf-page-shell').scrollIntoView({behavior:'smooth',block:'nearest'});}
+function bfSwitchTab(tab){
+  if(bfIsScrolling) bfToggleScroll();
+  if(bfMetOn) bfMetStop();
+  const lock=tab==='live'?'hidden':'';document.body.style.overflow=lock;document.documentElement.style.overflow=lock;
+  ['songs','services','live'].forEach(t=>{
+    document.getElementById('bf-sec-'+t).classList.add('bf-hidden');
+    const btn=document.getElementById('bf-tab-'+t);
+    if(btn) btn.classList.remove('active');
+  });
+  document.getElementById('bf-sec-'+tab).classList.remove('bf-hidden');
+  const activeBtn=document.getElementById('bf-tab-'+tab);
+  if(activeBtn) activeBtn.classList.add('active');
+  if(tab==='songs'){bfRenderSongs();bfApplyAtmosphere(bfCurrentSong?bfPaletteForSong(bfCurrentSong):{colors:[bfBgBase,'#123c40','#090d12']});}
+  if(tab==='services') bfRenderServices();
+}
+
+/* ---------- SERVICIOS ---------- */
+function bfRenderServices(){
+  const grid=document.getElementById('bf-services-grid');
+  if(!bfServices.length){
+    grid.innerHTML='<div class="bf-empty">Aún no hay servicios. Crea uno con "Nuevo Servicio".</div>';
+    return;
+  }
+  const sorted=[...bfServices].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  grid.innerHTML=sorted.map(sv=>{
+    const songs=sv.songIds.map(id=>bfSongs.find(s=>s.id===id)).filter(Boolean);
+    const list=songs.length?`<ul class="bf-svc-songs">${songs.map((s,i)=>{const nc=bfNeon(bfSongColor(s));return `
+      <li style="--n:${nc};--nrgb:${bfRgbStr(nc)}"><span class="n">${i+1}</span><span class="t">${bfEsc(s.title)}</span>
+      <span class="bf-badge-key">${bfEsc(s.key)}</span>
+      <button class="bf-mini" onclick="bfStartLive('${s.id}','services')"><i class="fa-solid fa-play"></i></button></li>`;}).join('')}</ul>`
+      :'<div class="bf-empty">Sin canciones asignadas.</div>';
+    return `
+      <div class="bf-card">
+        <div>
+          <div class="bf-card-head"><span class="bf-svc-date">${bfFmtDate(sv.date)}</span>
+          <span class="bf-badge-bpm"><i class="fa-solid fa-music"></i> ${songs.length}</span></div>
+          <h3 class="bf-card-title">${bfEsc(sv.name||'Servicio')}</h3>
+          <div class="bf-card-sub">${bfEsc(sv.notes||'')}</div>
+          ${list}
+        </div>
+        <div class="bf-card-foot">
+          <button onclick="bfDeleteService('${sv.id}')" class="bf-tab-btn" style="padding:4px 8px;font-size:12px;color:#f87171;"><i class="fa-solid fa-trash"></i> Eliminar</button>
+          <button onclick="bfOpenServiceModal('${sv.id}')" class="bf-tab-btn" style="padding:4px 8px;font-size:12px;color:#fff;"><i class="fa-solid fa-pen"></i> Editar</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function bfOpenServiceModal(id){
+  const sv=id?bfServices.find(s=>s.id===id):null;
+  document.getElementById('bf-smodal-title').innerText=sv?'Editar Servicio':'Nuevo Servicio';
+  document.getElementById('bf-smodal-id').value=sv?sv.id:'';
+  document.getElementById('bf-smodal-date').value=sv?sv.date:bfToday();
+  document.getElementById('bf-smodal-name').value=sv?sv.name:'';
+  document.getElementById('bf-smodal-notes').value=sv?(sv.notes||''):'';
+  bfSvcSel=sv?sv.songIds.filter(i=>bfSongs.some(s=>s.id===i)):[];
+  bfRenderSvcSel();
+  document.getElementById('bf-smodal').classList.remove('bf-hidden');
+}
+function bfCloseServiceModal(){document.getElementById('bf-smodal').classList.add('bf-hidden');}
+
+function bfRenderSvcSel(){
+  const ul=document.getElementById('bf-smodal-list');
+  ul.innerHTML=bfSvcSel.length?bfSvcSel.map((id,i)=>{
+    const s=bfSongs.find(x=>x.id===id);
+    return `<li><span class="n">${i+1}</span><span class="t">${bfEsc(s.title)}</span>
+      <button class="bf-mini" onclick="bfSvcMove(${i},-1)">▲</button>
+      <button class="bf-mini" onclick="bfSvcMove(${i},1)">▼</button>
+      <button class="bf-mini" onclick="bfSvcRemove(${i})">✕</button></li>`;
+  }).join(''):'<div class="bf-empty" style="margin:0;">Aún no agregas canciones.</div>';
+  const sel=document.getElementById('bf-smodal-select');
+  const avail=bfSongs.filter(s=>!bfSvcSel.includes(s.id));
+  sel.innerHTML=avail.length?avail.map(s=>`<option value="${s.id}">${bfEsc(s.title)} (${bfEsc(s.key)})</option>`).join(''):'<option value="">No hay más canciones en el repertorio</option>';
+}
+function bfSvcAddSong(){
+  const v=document.getElementById('bf-smodal-select').value;
+  if(!v) return;
+  bfSvcSel.push(v);
+  bfRenderSvcSel();
+}
+function bfSvcRemove(i){bfSvcSel.splice(i,1);bfRenderSvcSel();}
+function bfSvcMove(i,d){
+  const j=i+d;
+  if(j<0||j>=bfSvcSel.length) return;
+  [bfSvcSel[i],bfSvcSel[j]]=[bfSvcSel[j],bfSvcSel[i]];
+  bfRenderSvcSel();
+}
+function bfSaveService(){
+  const id=document.getElementById('bf-smodal-id').value;
+  const date=document.getElementById('bf-smodal-date').value;
+  const name=document.getElementById('bf-smodal-name').value.trim()||'Servicio';
+  const notes=document.getElementById('bf-smodal-notes').value.trim();
+  if(!date) return alert('Elige la fecha del servicio');
+  const sv={id:id||Date.now().toString(),date,name,notes,songIds:[...bfSvcSel]};
+  if(id){const i=bfServices.findIndex(s=>s.id===id);bfServices[i]=sv;}else bfServices.push(sv);
+  bfSaveServices();
+  bfCloseServiceModal();
+  bfRenderServices();
+}
+function bfDeleteService(id){
+  if(!confirm('¿Eliminar este servicio?')) return;
+  bfDeleted.push(id);
+  bfServices=bfServices.filter(s=>s.id!==id);
+  bfSaveServices();
+  bfRenderServices();
+}
+
+/* ---------- YOUTUBE POR CANCIÓN ---------- */
+function bfNormYoutube(raw){
+  const value=String(raw||'').trim();
+  if(!value) return '';
+  try{
+    const u=new URL(value);
+    const host=u.hostname.toLowerCase().replace(/^www\./,'').replace(/^m\./,'');
+    let id='';
+    if(host==='youtu.be') id=u.pathname.split('/').filter(Boolean)[0]||'';
+    else if(host==='youtube.com'||host==='music.youtube.com'||host==='youtube-nocookie.com'){
+      if(u.pathname==='/watch') id=u.searchParams.get('v')||'';
+      else {
+        const m=u.pathname.match(/^\/(?:embed|shorts|live)\/([A-Za-z0-9_-]{11})/);
+        if(m) id=m[1];
+      }
+    }
+    if(!/^[A-Za-z0-9_-]{11}$/.test(id)) return '';
+    return 'https://www.youtube-nocookie.com/embed/'+id+'?rel=0&playsinline=1';
+  }catch(e){return '';}
+}
+function bfYoutubeVideoId(url){
+  const m=String(url||'').match(/\/embed\/([A-Za-z0-9_-]{11})/);
+  return m?m[1]:'';
+}
+
+/* ---------- VIDEO DE YOUTUBE EN VIVO ---------- */
+function bfSmallScreen(){return window.matchMedia('(max-width:700px), (max-height:520px)').matches;}
+function bfYtOpenPref(){
+  let s=null;
+  try{s=localStorage.getItem('bf_yt_open_v2');}catch(e){}
+  if(s==='1') return true;
+  if(s==='0') return false;
+  return window.matchMedia('(min-width:901px)').matches;
+}
+function bfSetYoutubeOpen(open,save){
+  const lay=document.querySelector('#bf-sec-live .bf-live-layout');
+  if(!lay) return;
+  lay.classList.toggle('bf-vid-open',open);
+  const chip=document.getElementById('bf-vid-chip');
+  if(chip){chip.classList.toggle('active',open);chip.setAttribute('aria-pressed',open?'true':'false');}
+  if(open&&bfSmallScreen()) bfToggleTop(true,true);
+  if(save){try{localStorage.setItem('bf_yt_open_v2',open?'1':'0');}catch(e){}}
+  setTimeout(bfProgress,60);
+}
+function bfToggleYoutubeCard(){
+  const lay=document.querySelector('#bf-sec-live .bf-live-layout');
+  if(lay) bfSetYoutubeOpen(!lay.classList.contains('bf-vid-open'),true);
+}
+function bfUpdateYoutubePlayer(){
+  const title=document.getElementById('bf-yt-title');
+  const wrap=document.getElementById('bf-yt-frame-wrap');
+  const empty=document.getElementById('bf-yt-empty');
+  if(!wrap||!empty||!bfCurrentSong) return;
+  const src=bfNormYoutube(bfCurrentSong.youtube||'');
+  const current=wrap.querySelector('iframe');
+  if(src){
+    if(!current||current.src!==src){
+      wrap.innerHTML='';
+      const frame=document.createElement('iframe');
+      frame.src=src;
+      frame.title='Video de '+(bfCurrentSong.title||'la canción');
+      frame.loading='lazy';
+      frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      frame.referrerPolicy='strict-origin-when-cross-origin';
+      frame.allowFullscreen=true;
+      wrap.appendChild(frame);
+    }
+    wrap.classList.remove('bf-hidden');
+    empty.classList.add('bf-hidden');
+  }else{
+    wrap.innerHTML='';
+    wrap.classList.add('bf-hidden');
+    empty.classList.remove('bf-hidden');
+  }
+  if(title) title.textContent=bfCurrentSong.title||'Video de la canción';
+  bfSetYoutubeOpen(bfYtOpenPref(),false);
+}
+function bfOpenYoutube(){
+  const url=bfNormYoutube(bfCurrentSong&&bfCurrentSong.youtube);
+  const id=bfYoutubeVideoId(url);
+  if(id) window.open('https://www.youtube.com/watch?v='+id,'_blank','noopener');
+  else alert('Esta canción todavía no tiene un enlace de YouTube.');
+}
+
+/* ---------- MODO EN VIVO ---------- */
+function bfTransposeChord(chord,semi){
+  return chord.replace(/[A-G][#b]?/g,m=>{
+    let idx=bfChromatic.indexOf(m);
+    if(idx===-1) return m;
+    let n=(idx+semi)%12; if(n<0) n+=12;
+    return bfChromatic[n];
+  });
+}
+function bfStartLive(id,from){
+  bfCurrentSong=bfSongs.find(s=>s.id===id);
+  if(!bfCurrentSong) return;
+  bfMetStop();
+  bfBgBase=bfSongColor(bfCurrentSong);localStorage.setItem('bf_bg',bfBgBase);bfApplyAtmosphere(bfPaletteForSong(bfCurrentSong));
+  bfLiveFrom=from||'songs';
+  bfTransposeSemi=0;
+  bfUpdateLiveDisplay();
+  const sp=document.getElementById('bf-scroll-speed');sp.value=1;bfSpeedUi();
+  bfSwitchTab('live');
+  document.getElementById('bf-live-sheet').scrollTop=0;bfProgress();
+}
+function bfExitLive(){bfSwitchTab(bfLiveFrom);}
+function bfUpdateLiveDisplay(){
+  document.getElementById('bf-live-title').innerText=bfCurrentSong.title;
+  document.getElementById('bf-bar-title').innerText=bfCurrentSong.title;
+  document.getElementById('bf-live-meta').innerText=`Tono Base: ${bfCurrentSong.key} | Tempo: ${bfCurrentSong.bpm} BPM`;
+  document.getElementById('bf-live-musicians').innerText=bfCurrentSong.musicians||'Sin asignación de integrantes';
+  if(!bfMetOn) bfMetSetBpm(parseInt(bfCurrentSong.bpm)||120);
+  document.getElementById('bf-sec-live').style.background='linear-gradient(180deg,rgba(18,18,18,.18) 0%,#121212 62%),'+bfSongColor(bfCurrentSong);
+  const lc=document.getElementById('bf-live-cover');
+  if(bfCurrentSong.cover){lc.src=bfCurrentSong.cover;lc.classList.remove('bf-hidden');}else{lc.classList.add('bf-hidden');}
+  bfUpdateYoutubePlayer();
+  bfRenderLiveSheet();
+}
+function bfParseLine(line){
+  const re=/\[([^\]]*)\]/g;
+  let last=0,chord='',m,has=false;
+  const segs=[];
+  while((m=re.exec(line))!==null){
+    has=true;
+    const t=line.slice(last,m.index);
+    if(t!==''||chord!=='') segs.push([chord,t]);
+    chord=m[1];last=re.lastIndex;
+  }
+  const tail=line.slice(last);
+  if(has&&(tail!==''||chord!=='')) segs.push([chord,tail]);
+  return {has:has,segs:segs};
+}
+function bfRenderLiveSheet(){
+  if(!bfCurrentSong) return;
+  const sheet=document.getElementById('bf-live-sheet');
+  const cur=bfSongs.find(x=>x.id===bfCurrentSong.id)||bfCurrentSong,rev=!!cur.revisado;
+  let html=`<div class="bf-rev-wrap"><button type="button" class="bf-rev-btn${rev?' is-rev':''}" onclick="bfToggleRevisado()" aria-pressed="${rev}" aria-label="${rev?'Canción revisada y protegida. Desbloquear con contraseña':'Marcar canción como revisada'}" title="${rev?'Revisada: requiere contraseña para desbloquear':'Marcar como revisada'}"><i class="${rev?'fa-solid fa-lock':'fa-regular fa-circle'}" aria-hidden="true"></i></button></div>`;
+  bfCurrentSong.content.split('\n').forEach(line=>{
+    const p=bfParseLine(line);
+    html+='<div class="song-line">';
+    if(p.has){
+      p.segs.forEach(sg=>{
+        const ch=sg[0]?bfEsc(bfTransposeChord(sg[0],bfTransposeSemi)):'';
+        html+=`<div class="chord-word"><span class="chord-mark">${ch}</span><span class="lyric-text">${bfEsc(sg[1])}</span></div>`;
+      });
+    }else{
+      html+=`<div class="lyric-text">${bfEsc(line)}</div>`;
+    }
+    html+='</div>';
+  });
+  sheet.innerHTML=html;
+  document.getElementById('bf-live-key').innerText=bfTransposeChord(bfCurrentSong.key,bfTransposeSemi);
+  sheet.scrollLeft=0;
+}
+function bfTranspose(semi){bfTransposeSemi+=semi;bfRenderLiveSheet();}
+
+function bfToggleScroll(){
+  const btn=document.getElementById('bf-scroll-btn'),icon=document.getElementById('bf-scroll-icon'),bb=document.getElementById('bf-bar-scroll');
+  if(bfIsScrolling){
+    clearInterval(bfScrollInterval);bfIsScrolling=false;
+    icon.className='fa-solid fa-play';
+  }else{
+    bfIsScrolling=true;icon.className='fa-solid fa-pause';
+    bfUpdateScrollSpeed();
+  }
+  btn.classList.toggle('bf-stop',bfIsScrolling);
+  if(bb) bb.classList.toggle('bf-stop',bfIsScrolling);
+}
+function bfToggleTop(force,nosave){
+  const sec=document.getElementById('bf-sec-live');
+  const off=(typeof force==='boolean')?force:!sec.classList.contains('bf-top-off');
+  sec.classList.toggle('bf-top-off',off);
+  document.getElementById('bf-top-txt').innerText=off?'Controles':'Ocultar controles';
+  document.getElementById('bf-top-ic').className='fa-solid '+(off?'fa-chevron-down':'fa-chevron-up');
+  if(!nosave){try{localStorage.setItem('bf_top_off',off?'1':'0');}catch(e){}}
+  if(!off&&bfSmallScreen()){const lay=document.querySelector('#bf-sec-live .bf-live-layout');if(lay&&lay.classList.contains('bf-vid-open')) bfSetYoutubeOpen(false,false);}
+}
+const BF_FS_MIN=-2,BF_FS_MAX=12;
+function bfFsBase(){return window.matchMedia('(max-width:700px)').matches?16:18;}
+function bfFsStep(){
+  let n=0;
+  try{n=parseInt(localStorage.getItem('bf_fs_step_v1')||'0',10)||0;}catch(e){}
+  return Math.max(BF_FS_MIN,Math.min(BF_FS_MAX,n));
+}
+function bfFsApply(){
+  const step=bfFsStep();
+  const sh=document.getElementById('bf-live-sheet');
+  if(sh) sh.style.setProperty('--fs',(bfFsBase()+step*2)+'px');
+  const dec=document.getElementById('bf-fs-dec'),inc=document.getElementById('bf-fs-inc');
+  if(dec) dec.disabled=step<=BF_FS_MIN;
+  if(inc) inc.disabled=step>=BF_FS_MAX;
+}
+function bfFontSize(d){
+  const step=Math.max(BF_FS_MIN,Math.min(BF_FS_MAX,bfFsStep()+d));
+  try{localStorage.setItem('bf_fs_step_v1',String(step));}catch(e){}
+  bfFsApply();
+  setTimeout(bfProgress,30);
+}
+function bfSpeedUi(){
+  const r=document.getElementById('bf-scroll-speed');
+  if(!r) return;
+  r.style.setProperty('--p',((r.value-r.min)/(r.max-r.min)*100)+'%');
+  document.getElementById('bf-speed-val').innerText=r.value+'/10';
+}
+function bfProgress(){
+  const c=document.getElementById('bf-live-sheet'),b=document.getElementById('bf-prog-bar');
+  if(!c||!b) return;
+  const m=c.scrollHeight-c.clientHeight;
+  b.style.width=(m>0?Math.min(100,c.scrollTop/m*100):0)+'%';
+}
+function bfUpdateScrollSpeed(){
+  bfSpeedUi();
+  if(!bfIsScrolling) return;
+  clearInterval(bfScrollInterval);
+  const speed=parseInt(document.getElementById('bf-scroll-speed').value);
+  const c=document.getElementById('bf-live-sheet');
+  bfScrollInterval=setInterval(()=>{
+    if(c.scrollTop+c.clientHeight>=c.scrollHeight-2){bfToggleScroll();return;}
+    c.scrollTop+=1;
+  },1000/(8*speed));
+}
+
+/* ---------- CRUD CANCIONES ---------- */
+function bfHash(str,seed=0){
+  let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;
+  for(let i=0,ch;i<str.length;i++){ch=str.charCodeAt(i);h1=Math.imul(h1^ch,2654435761);h2=Math.imul(h2^ch,1597334677);}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+  h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return 4294967296*(2097151&h2)+(h1>>>0);
+}
+
+const BF_LOCK_HASH=7096255400404840;
+function bfLockOkPass(v){return bfHash('bandflow:'+v)===BF_LOCK_HASH;}
+let bfLockResolve=null,bfUnlockedId=null,bfRevFilter='all';
+function bfAskPass(text){
+  return new Promise(res=>{
+    if(bfLockResolve) bfLockResolve(false);
+    bfLockResolve=res;
+    document.getElementById('bf-lock-text').textContent=text;
+    const inp=document.getElementById('bf-lock-input');
+    inp.value='';
+    document.getElementById('bf-lock-err').textContent='';
+    document.getElementById('bf-lock-modal').classList.remove('bf-hidden');
+    setTimeout(()=>inp.focus(),30);
+  });
+}
+function bfLockClose(ok){
+  document.getElementById('bf-lock-modal').classList.add('bf-hidden');
+  const r=bfLockResolve;bfLockResolve=null;
+  if(r) r(ok);
+}
+function bfLockOk(){
+  const inp=document.getElementById('bf-lock-input');
+  if(bfLockOkPass(inp.value)){bfLockClose(true);}
+  else{document.getElementById('bf-lock-err').textContent='Contraseña incorrecta.';inp.select();}
+}
+function bfLockCancel(){bfLockClose(false);}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){const m=document.getElementById('bf-lock-modal');if(m&&!m.classList.contains('bf-hidden')) bfLockCancel();}
+});
+async function bfOpenSongModal(id=null){
+  if(id){
+    const s=bfSongs.find(x=>x.id===id);
+    if(s&&s.revisado){
+      const ok=await bfAskPass('Esta canción está marcada como revisada. Escribe la contraseña para editarla.');
+      if(!ok) return;
+      bfUnlockedId=id;
+    }
+  }
+  bfOpenSongModalRaw(id);
+}
+async function bfToggleRevisado(){
+  if(!bfCurrentSong) return;
+  const i=bfSongs.findIndex(x=>x.id===bfCurrentSong.id);
+  if(i<0) return;
+  if(bfSongs[i].revisado){
+    const ok=await bfAskPass('Escribe la contraseña para quitar la marca de revisada.');
+    if(!ok) return;
+    bfSongs[i]={...bfSongs[i],revisado:false,revisadoEn:'',mod:Date.now()};
+  }else{
+    bfSongs[i]={...bfSongs[i],revisado:true,revisadoEn:new Date().toISOString(),mod:Date.now()};
+  }
+  bfCurrentSong=bfSongs[i];
+  bfSaveLocal();
+  bfPush();
+  bfRenderSongs();
+  const sh=document.getElementById('bf-live-sheet'),t=sh.scrollTop,l=sh.scrollLeft;
+  bfRenderLiveSheet();
+  sh.scrollTop=t;sh.scrollLeft=l;
+}
+function bfSetRevFilter(k){bfRevFilter=k;bfSongsPage=1;bfRenderSongs();}
+function bfOpenSongModalRaw(id=null){
+  document.getElementById('bf-modal').classList.remove('bf-hidden');
+  document.getElementById('bf-modal-del').classList.toggle('bf-hidden',!id);
+  const f=(k,v)=>document.getElementById('bf-modal-'+k).value=v;
+  if(id){
+    const s=bfSongs.find(x=>x.id===id);
+    f('id',s.id);f('song-title',s.title);f('artist',s.artist||'');f('key',s.key);f('bpm',s.bpm);f('musicians',s.musicians||'');f('content',s.content);
+    f('cover',s.cover||'');f('youtube',s.youtube||'');bfFillCoverUi(s.cover||'',s.color||'');
+    document.getElementById('bf-modal-reviewed').checked=!!s.revisado;bfInitPalette(s);
+  }else{
+    f('id','');f('song-title','');f('artist','');f('key','Em');f('bpm','120');f('musicians','');f('content','');
+    f('cover','');f('youtube','');bfFillCoverUi('','');
+    document.getElementById('bf-modal-reviewed').checked=false;bfInitPalette({color:'#1e3a5f'});
+  }
+}
+function bfEditCurrentSong(){if(bfCurrentSong) bfOpenSongModal(bfCurrentSong.id);}
+function bfCloseModal(){document.getElementById('bf-modal').classList.add('bf-hidden');bfUnlockedId=null;bfApplyAtmosphere(bfCurrentSong?bfPaletteForSong(bfCurrentSong):{colors:[bfBgBase,'#123c40','#090d12']});}
+async function bfSaveSong(){
+  const g=k=>document.getElementById('bf-modal-'+k).value;
+  const id=g('id'),title=g('song-title').trim(),artist=g('artist').trim(),key=g('key'),bpm=g('bpm'),musicians=g('musicians'),content=g('content'),youtubeRaw=g('youtube').trim(),youtubeEmbed=bfNormYoutube(youtubeRaw),youtubeId=bfYoutubeVideoId(youtubeEmbed),youtube=youtubeId?'https://www.youtube.com/watch?v='+youtubeId:'';
+  if(!title) return alert('Ingresa un título');
+  if(youtubeRaw&&!youtube) return alert('El enlace de YouTube no parece válido. Pega el enlace completo del video.');
+  if(id){const cur=bfSongs.find(x=>x.id===id);if(cur&&cur.revisado&&bfUnlockedId!==id) return alert('Esta canción está revisada y bloqueada. Ábrela con Editar y escribe la contraseña.');}
+  const requestedReview=document.getElementById('bf-modal-reviewed').checked;
+  const previous=id?bfSongs.find(x=>x.id===id):null;
+  if(requestedReview&&!(previous&&previous.revisado)){
+    const authorized=await bfAskPass('Confirma la contraseña para guardar esta canción como revisada y protegida.');
+    if(!authorized) return;
+  }
+  if(bfCoverPromise){try{await bfCoverPromise;}catch(e){}}
+  const cover=bfNormCover(g('cover'));
+  const color=bfModalColorSet?g('color'):'';
+  const palette=bfModalPalette?{id:bfModalPalette.id,name:bfModalPalette.name,colors:[...bfModalPalette.colors]}:null;
+  if(id){
+    const idx=bfSongs.findIndex(s=>s.id===id);
+    bfSongs[idx]={...bfSongs[idx],id,title,artist,key,bpm,musicians,content,cover,color,palette,youtube,revisado:requestedReview,revisadoEn:requestedReview?(bfSongs[idx].revisadoEn||new Date().toISOString()):'',mod:Date.now()};
+  }else{
+    bfSongs.push({id:Date.now().toString(),title,artist,key,bpm,musicians,content,cover,color,palette,youtube,revisado:requestedReview,revisadoEn:requestedReview?new Date().toISOString():'',mod:Date.now()});
+  }
+  bfSaveLocal();
+  bfPush();
+  bfCloseModal();
+  bfRenderSongs();
+  if(bfCurrentSong&&bfCurrentSong.id===id){
+    bfCurrentSong=bfSongs.find(s=>s.id===id);
+    bfApplyAtmosphere(bfPaletteForSong(bfCurrentSong));
+    bfUpdateLiveDisplay();
+  }
+}
+
+function bfDeleteSong(id){
+  const s=bfSongs.find(x=>x.id===id);
+  if(s&&s.revisado&&bfUnlockedId!==id){alert('Esta canción está revisada y bloqueada. Ábrela con Editar y escribe la contraseña.');return false;}
+  if(!s||!confirm('¿Eliminar "'+s.title+'" del repertorio? También se quitará de los servicios.')) return false;
+  bfDeleted.push(id);
+  bfSongs=bfSongs.filter(x=>x.id!==id);
+  bfServices.forEach(sv=>{sv.songIds=sv.songIds.filter(i=>i!==id);});
+  bfSaveLocal();
+  bfPush();
+  bfRenderSongs();bfRenderServices();
+  return true;
+}
+function bfDeleteFromModal(){
+  const id=document.getElementById('bf-modal-id').value;
+  if(!id) return;
+  if(bfDeleteSong(id)){
+    bfCloseModal();
+    if(bfCurrentSong&&bfCurrentSong.id===id){bfCurrentSong=null;bfSwitchTab('songs');}
+  }
+}
+
+if(BF_LOGO_SHOW_NAME) document.getElementById('bf-wordmark').classList.remove('bf-hidden');
+(function(){const lg=document.getElementById('bf-logo');if(lg&&lg.complete&&lg.naturalWidth===0) bfLogoFail();})();
+document.body.classList.add('bf-page');
+bfBgBase=localStorage.getItem('bf_bg')||BF_BG_DEFAULT;
+bfApplyAtmosphere({colors:[bfBgBase,'#123c40','#090d12']});
+(function(){
+  const g=document.getElementById('bf-songs-grid');
+  if(!g) return;
+  let hoveredSongId=null;
+  const restoreAtmosphere=()=>{
+    hoveredSongId=null;
+    bfApplyAtmosphere(bfCurrentSong?bfPaletteForSong(bfCurrentSong):{colors:[bfBgBase,'#123c40','#090d12']});
+  };
+  const applyRowAtmosphere=row=>{
+    if(!row) return;
+    const song=bfSongs.find(x=>String(x.id)===String(row.dataset.songId));
+    if(!song) return;
+    hoveredSongId=String(song.id);
+    bfApplyAtmosphere(bfPaletteForSong(song));
+  };
+  g.addEventListener('pointerover',e=>{
+    if(e.pointerType==='touch') return;
+    const row=e.target.closest('.bf-srow');
+    if(!row || !g.contains(row)) return;
+    const from=e.relatedTarget&&e.relatedTarget.closest?e.relatedTarget.closest('.bf-srow'):null;
+    if(from===row && hoveredSongId===String(row.dataset.songId)) return;
+    applyRowAtmosphere(row);
+  });
+  g.addEventListener('pointerout',e=>{
+    if(e.pointerType==='touch') return;
+    const row=e.target.closest('.bf-srow');
+    if(!row) return;
+    const to=e.relatedTarget&&e.relatedTarget.closest?e.relatedTarget.closest('.bf-srow'):null;
+    if(to===row) return;
+    if(to && g.contains(to)){applyRowAtmosphere(to);return;}
+    restoreAtmosphere();
+  });
+  g.addEventListener('focusin',e=>{const row=e.target.closest('.bf-srow');if(row)applyRowAtmosphere(row);});
+  g.addEventListener('focusout',e=>{
+    const row=e.target.closest('.bf-srow');
+    if(!row) return;
+    const to=e.relatedTarget&&e.relatedTarget.closest?e.relatedTarget.closest('.bf-srow'):null;
+    if(to && g.contains(to)){applyRowAtmosphere(to);return;}
+    restoreAtmosphere();
+  });
+  g.addEventListener('pointerleave',restoreAtmosphere);
+})();
+(function(){const shell=document.getElementById('bf-page-shell');if(!shell)return;let sx=0,sy=0;shell.addEventListener('touchstart',e=>{if(e.touches.length===1){sx=e.touches[0].clientX;sy=e.touches[0].clientY;}},{passive:true});shell.addEventListener('touchend',e=>{if(!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.25){const q=(document.getElementById('bf-search').value||'').toLowerCase(),list=bfSongs.filter(s=>(s.title+' '+(s.artist||'')+' '+s.content).toLowerCase().includes(q)&&(bfRevFilter==='all'||(bfRevFilter==='rev')===!!s.revisado));const max=Math.max(1,Math.ceil(list.length/BF_SONGS_PER_PAGE));if(dx<0&&bfSongsPage<max)bfChangePage(bfSongsPage+1);else if(dx>0&&bfSongsPage>1)bfChangePage(bfSongsPage-1);}},{passive:true});shell.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)*1.25&&Math.abs(e.deltaX)>18){const q=(document.getElementById('bf-search').value||'').toLowerCase(),list=bfSongs.filter(s=>(s.title+' '+(s.artist||'')+' '+s.content).toLowerCase().includes(q)&&(bfRevFilter==='all'||(bfRevFilter==='rev')===!!s.revisado));const max=Math.max(1,Math.ceil(list.length/BF_SONGS_PER_PAGE));if(e.deltaX>0&&bfSongsPage<max)bfChangePage(bfSongsPage+1);else if(e.deltaX<0&&bfSongsPage>1)bfChangePage(bfSongsPage-1);}},{passive:true});})();
+(function(){
+  const sh=document.getElementById('bf-live-sheet');
+  if(!sh) return;
+  sh.addEventListener('scroll',bfProgress,{passive:true});
+  sh.addEventListener('wheel',function(ev){
+    if(!sh) return;
+    if(Math.abs(ev.deltaX)>Math.abs(ev.deltaY)&&sh.scrollWidth>sh.clientWidth+1){
+      sh.scrollLeft+=ev.deltaX;
+      if(ev.cancelable) ev.preventDefault();
+    }
+  },{passive:false});
+  bfSpeedUi();
+})();
+setTimeout(bfAutoColors,1500);
+bfRenderSongs();
+bfStatus(bfKey?'Sincronizando...':'Sincronizar');
+bfFit();
+bfFsApply();
+(function(){let v=null;try{v=localStorage.getItem('bf_top_off');}catch(e){}bfToggleTop(v===null?window.innerHeight<560:v==='1',v===null);})();
+window.addEventListener('resize',()=>{bfFitSoon();bfFsApply();});
+window.addEventListener('orientationchange',()=>{bfFitSoon();bfFsApply();});
+window.addEventListener('pageshow',bfFitSoon);
+window.addEventListener('load',bfFitSoon);
+if(window.visualViewport) visualViewport.addEventListener('resize',bfFitSoon);
+setTimeout(bfFit,400);setTimeout(bfFit,1500);
+bfPull();
+window.addEventListener('focus',bfPull);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)bfPull();});
+</script>
+</div>
